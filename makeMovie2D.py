@@ -21,7 +21,7 @@ Usage:
 #### ========== User Input ==========
 
 # ID to be used for naming purposes
-ID = 'NR2D_M1.4_Rpns040_Rs1.50e2'
+ID = 'NR2D_M1.4_Rpns040_Rs1.80e2'
 
 # Directory containing AMReX plotfiles
 plotfileDirectory \
@@ -40,10 +40,10 @@ zScale = 'None'
 linthresh = 1.0e-2
 
 # Coordinate system (currently supports 'cartesian' and 'spherical' )
-CoordinateSystem = 'spherical'
+CoordinateSystem = 'cartesian'
 
 # Only use every <plotEvery> plotfile
-plotEvery = 1
+plotEvery = 10
 
 # Colormap
 cmap = 'RdBu'
@@ -54,7 +54,7 @@ SSf = -1 # -1 -> plotfileArray.shape[0] - 1
 nSS = -1 # -1 -> plotfileArray.shape[0]
 
 UseCustomLimits = True
-vmin = -1.0e-6
+vmin = -1.0e-5
 vmax = -vmin
 
 MovieRunTime = 10.0 # seconds
@@ -186,7 +186,7 @@ def UpdateFrame(t):
     Data, DataUnits, X1_C, X2_C, dX1, dX2, Time = f(t)
 
     im.set_array( Data.flatten() )
-    time_text.set_text( r'$t={:.3e}\ \left[\mathrm{ms}\right]$' \
+    time_text.set_text( r'$t={:.3e}\ \left[\mathrm{{ms}}\right]$' \
                         .format( Time ) )
 
     ret = ( im, time_text )
@@ -213,6 +213,8 @@ if CoordinateSystem == 'spherical':
 
     ax.set_theta_zero_location( 'N' ) # z-axis vertical
     ax.set_theta_direction( -1 )
+else:
+    ax.grid()
 
 anim.save( MovieName, fps = fps, dpi = 300 )
 print( '\n  Saved movie: {:}'.format( MovieName ) )
