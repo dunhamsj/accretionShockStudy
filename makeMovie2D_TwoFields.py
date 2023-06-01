@@ -50,10 +50,10 @@ im                = np.empty( nPanels, object )
 cbar              = np.empty( nPanels, object )
 
 # ID to be used for naming purposes
-ID[0] = 'GR2D_M2.8_Rpns020_Rs8.75e1'
-ID[1] = 'NR2D_M2.8_Rpns020_Rs8.75e1'
+ID[0] = 'GR2D_M2.8_Rpns020_Rs6.00e1'
+ID[1] = 'NR2D_M2.8_Rpns020_Rs6.00e1'
 
-title = 'M2.8_Rpns020_Rs8.75e1'
+title = 'M2.8_Rpns020_Rs6.00e1'
 
 # Directory containing AMReX plotfiles
 plotfileDirectory[0] = '/lump/data/accretionShockStudy/\
@@ -66,12 +66,12 @@ for i in range( nPanels ):
     plotfileBaseName[i] = ID[i] + '.plt'
 
 # Field to plot
-field[0] = 'DivV2'
-field[1] = 'DivV2'
+field[0] = 'CF_E'
+field[1] = 'CF_E'
 
 # Scale of colorbar
-zScale = 'None'
-#zScale = 'log'
+#zScale = 'None'
+zScale = 'log'
 #zScale = 'symlog'
 linthresh = 1.0e-2
 
@@ -79,8 +79,8 @@ linthresh = 1.0e-2
 plotEvery = 1
 
 # Colormap
-cmap[0] = 'RdBu'
-cmap[1] = 'RdBu'
+cmap[0] = 'viridis'
+cmap[1] = 'viridis'
 
 # First and last snapshots and number of snapshots to include in movie
 SSi = -1 # -1 -> SSi = 0
@@ -120,8 +120,7 @@ for i in range( nPanels ):
                       forceChoiceF = False, owF = False, \
                       UsePhysicalUnits = True, \
                       MaxLevel = -1, Verbose = Verbose )
-    if i == 1:
-        plotfileArray[i] = np.copy( plotfileArray[i][:-1] )
+    plotfileArray[i] = np.copy( plotfileArray[i][:-1] )
 
     nSSS = min( nSSS, plotfileArray[i].shape[0] )
 

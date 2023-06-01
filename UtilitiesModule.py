@@ -87,7 +87,7 @@ def GetFileArray( plotFileDirectory, plotFileBaseName, \
 
     if SSi < 0: SSi = 0
     if SSf < 0: SSf = fileArray.shape[0] - 1
-    if nSS < 0: nSS = fileArray.shape[0]
+    if nSS < 0: nSS = SSf - SSi + 1
 
     plotFileArray = []
     for i in range( nSS ):
@@ -378,6 +378,14 @@ def GetData( DataDirectory, PlotFileBaseName, Field, \
         elif CoordinateSystem == 'cylindrical': DataUnits = 'km^2'
         elif CoordinateSystem == 'spherical'  : DataUnits = 'km^2'
 
+    elif Field == 'GF_SqrtGm':
+
+        Data = np.copy( CoveringGrid[Field].to_ndarray() )
+
+        if   CoordinateSystem == 'cartesian'  : DataUnits = ''
+        elif CoordinateSystem == 'cylindrical': DataUnits = 'km^2'
+        elif CoordinateSystem == 'spherical'  : DataUnits = 'km^2'
+
     elif Field == 'GF_K_11':
 
         Data = np.copy( CoveringGrid[Field].to_ndarray() )
@@ -407,6 +415,15 @@ def GetData( DataDirectory, PlotFileBaseName, Field, \
         DataUnits = ''
 
     # --- Derived Fields ---
+
+    elif Field == 'AngularKineticEnergy':
+
+        D  = np.copy( CoveringGrid['CF_D'    ].to_ndarray() )
+        S2 = np.copy( CoveringGrid['CF_S2'   ].to_ndarray() )
+        g2 = np.copy( CoveringGrid['GF_Gm_22'].to_ndarray() )
+
+        DataUnits = ''
+        Data      = S2**2 / g2 / ( 2.0 * D )
 
     elif Field == 'LateralMomentumFluxInRadialDirectionGR':
 
