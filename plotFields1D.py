@@ -12,19 +12,20 @@ from UtilitiesModule import GetFileArray, GetData
 #  = '/home/kkadoogan/Work/Codes/thornado/SandBox/AMReX/Applications/\
 #StandingAccretionShock_Relativistic/'
 rootDirectory \
-  = '/lump/data/accretionShockStudy/'
+  = '/lump/data/accretionShockStudy/newData/1D/'
 
-ID = '1D_M1.4_Mdot0.3_Rs180'
+ID = '1D_M1.4_Rpns040_Rs1.20e2'
+#ID = '1D_M2.8_Rpns020_Rs6.00e1'
 
-field = 'MachNumber'
+field = 'AF_P'
 
 # Scale of colorbar
-zScale = 'None'
-#zScale = 'log'
+#zScale = 'None'
+zScale = 'log'
 #zScale = 'symlog'
 linthresh = 1.0e-2
 
-saveFigAs = 'fig.{:}.png'.format( ID )
+saveFigAs = '/home/kkadoogan/fig.{:}.png'.format( ID )
 
 verbose = True
 
@@ -32,30 +33,45 @@ verbose = True
 
 ### Plotting
 
-fig, ax  = plt.subplots( 1, 1, figsize = (12,8) )
+fig, ax  = plt.subplots( 1, 1 )
 
-for m in [ '1.4', '2.0', '2.8' ]:
-    for rs in [ '120', '150', '180' ]:
-        ID = 'GR1D_M{:}_Mdot0.3_Rs{:}'.format( m, rs )
-        plotFileBaseNameGR = ID + '.plt'
-        plotFileDirectoryGR = rootDirectory + ID + '/'
-        plotFileArrayGR = GetFileArray( plotFileDirectoryGR, plotFileBaseNameGR )
-        plotFileGR      = plotFileDirectoryGR + plotFileArrayGR[0]
-        time, dataGR, dataUnits, X1, X2, X3, dX1, dX2, dX3, nX \
-          = GetData( plotFileGR, field, verbose = verbose )
-        ax.plot( X1, dataGR[:,0,0] )
+GRID = 'GR' + ID
+plotfileBaseName = GRID + '.plt'
+plotfileDirectory = rootDirectory + GRID + '/'
+plotfileArray = GetFileArray( plotfileDirectory, plotfileBaseName )
+plotfile      = plotfileDirectory + plotfileArray[0]
+dataGR, dataUnits, \
+X1, X2, X3, dX1, dX2, dX3, xL, xH, nX \
+  = GetData( plotfileDirectory, plotfileBaseName, field, \
+             'spherical', True, \
+             ReturnTime = False, ReturnMesh = True )
+NRID = 'NR' + ID
+plotfileBaseName = NRID + '.plt'
+plotfileDirectory = rootDirectory + NRID + '/'
+plotfileArray = GetFileArray( plotfileDirectory, plotfileBaseName )
+plotfile      = plotfileDirectory + plotfileArray[0]
+dataNR, dataUnits, \
+X1, X2, X3, dX1, dX2, dX3, xL, xH, nX \
+  = GetData( plotfileDirectory, plotfileBaseName, field, \
+             'spherical', True, \
+             ReturnTime = False, ReturnMesh = True )
+ax.plot( X1[:,0,0], dataNR[:,0,0]/dataGR[:,0,0] )
 
 ax.grid()
 
+ax.set_title( r'$\texttt{{{:}}}$'.format( ID ) )
 if zScale == 'symlog':
     ax.set_yscale( zScale, linthresh = linthresh )
 else:
     ax.set_yscale( zScale )
 
-ax.set_xlabel( r'Radial Coordinate $\left[\mathrm{km}\right]$' )
+ax.set_xlabel( r'$r\ \left[\mathrm{km}\right]$' )
+ax.set_ylabel( r'$p_{\mathrm{NR}}/p_{\mathrm{GR}}$' )
 
-#plt.savefig( saveFigAs, dpi = 300 )
-plt.show()
+plt.savefig( saveFigAs, dpi = 300 )
+print( '\n  Saved {:}'.format( saveFigAs ) )
+
+#plt.show()
 plt.close()
 
 import os

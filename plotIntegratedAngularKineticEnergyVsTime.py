@@ -11,7 +11,7 @@ from UtilitiesModule import GetFileArray, GetData
 rootDirectory \
   = '/lump/data/accretionShockStudy/newData/2D/'
 
-ID = '1D_M1.4_Mdot0.3_Rs180'
+ID = '2D_M2.8_Rpns020_Rs8.75e1'
 
 field = 'AngularKineticEnergy'
 
@@ -26,8 +26,6 @@ verbose = True
 #### ====== End of User Input =======
 
 ### Integrate
-
-ID = '2D_M2.8_Rpns020_Rs6.00e1'
 
 plotfileBaseNameGR = 'GR' + ID + '.plt'
 plotfileDirectoryGR = rootDirectory + 'GR' + ID + '/'
@@ -45,21 +43,19 @@ X1, X2, X3, dX1, dX2, dX3, xL, xH, nX \
              'spherical', True, \
              ReturnTime = False, ReturnMesh = True )
 nX2 = nX[1]
-nT = 5
+nT = 7
 ind = np.empty( nT, dtype = np.int64 )
-ind[0] = 0
-ind[1] = nX2 // 4
-ind[2] = nX2 // 2
-ind[3] = 3 * nX2 // 4
-ind[4] = -1
+ind = np.linspace( 0, nX2-1, 7, dtype = np.int64 )
 
 def Integrate( plotfileDirectory, plotfileBaseName, plotfile ):
+
     sqrtGm, dataUnits, \
     X1, X2, X3, dX1, dX2, dX3, xL, xH, nX, Time \
       = GetData( plotfileDirectory, plotfileBaseName, 'GF_SqrtGm', \
                  'spherical', True, \
                  argv = [ 'a', plotfile[-8:] ], \
                  ReturnTime = True, ReturnMesh = True )
+
     data, dataUnits, \
     X1, X2, X3, dX1, dX2, dX3, xL, xH, nX, Time \
       = GetData( plotfileDirectory, plotfileBaseName, field, \
@@ -67,7 +63,7 @@ def Integrate( plotfileDirectory, plotfileBaseName, plotfile ):
                  argv = [ 'a', plotfile[-8:] ], \
                  ReturnTime = True, ReturnMesh = True )
 
-    integral = 0.0
+    integral = np.zeros( nT, np.float64 )
     for i in range( nT ):
         for iX1 in range( nX[0] ):
             integral[i] += data[iX1,ind[i],0] * sqrtGm[iX1,ind[i],0] \
@@ -79,7 +75,7 @@ def Integrate( plotfileDirectory, plotfileBaseName, plotfile ):
 #time = np.empty( nSS, np.float64 )
 #GR   = np.empty( (nT,nSS), np.float64 )
 #NR   = np.empty( (nT,nSS), np.float64 )
-#for iSS in range( nSS ):
+#for iSS in range( 0, nSS, 1 ):
 #
 #    print( '  {:}/{:}'.format( iSS, nSS ) )
 #
@@ -92,8 +88,8 @@ def Integrate( plotfileDirectory, plotfileBaseName, plotfile ):
 #      = Integrate( plotfileDirectoryNR, plotfileBaseNameNR, plotfileNR )
 #
 #for i in range( nT ):
-#    np.savetxt( 'GR_{:}.dat'.format( i ), np.vstack( ( time, GR[i] ) ) )
-#    np.savetxt( 'NR_{:}.dat'.format( i ), np.vstack( ( time, NR[i] ) ) )
+#    np.savetxt( 'GR_{:}_{:}.dat'.format( ID, i ), np.vstack( ( time, GR[i] ) ) )
+#    np.savetxt( 'NR_{:}_{:}.dat'.format( ID, i ), np.vstack( ( time, NR[i] ) ) )
 
 ### Plotting
 
@@ -101,8 +97,8 @@ fig, ax  = plt.subplots( 1, 1 )
 
 for i in range( nT ):
 
-    time, GR = np.loadtxt( 'GR_{:}.dat'.format( i ) )
-    time, NR = np.loadtxt( 'NR_{:}.dat'.format( i ) )
+    time, GR = np.loadtxt( 'GR_{:}_{:}.dat'.format( ID, i ) )
+    time, NR = np.loadtxt( 'NR_{:}_{:}.dat'.format( ID, i ) )
     ax.plot( time, NR - GR, \
              label \
                = r'$\theta/\pi={:}$' \
@@ -111,18 +107,19 @@ for i in range( nT ):
 ax.grid()
 ax.legend()
 
-if zScale == 'log': ax.set_yscale( 'log' )
+if zScale == 'log': ax.set_yscale( 'symlog', linthresh = 1.0e40 )
 
-ax.set_xlim( -1.0, 55.0 )
+#ax.set_ylim( 1.0e26, 1.0e45 )
+#ax.set_xlim( -1.0, 55.0 )
 ax.set_xlabel( r'$t\ \left[\mathrm{ms}\right]$' )
 ax.set_ylabel( r'$\frac{1}{\sin\theta}\int_{R_{\mathrm{PNS}}}^{1.5\,R_{\mathrm{S}}}\left(\tau^{\theta}_{\mathrm{NR}}-\tau^{\theta}_{\mathrm{GR}}\right)\sqrt{\gamma}\,dr$' )
 ax.text( 40, 1.0e30, \
          r'$\tau^{\theta}:=\frac{S^{2}S_{2}}{2\,D}$', fontsize = 15 )
 
-plt.show()
+#plt.show()
 
-#plt.savefig( saveFigAs, dpi = 300 )
-#print( '\n  Saved {:}'.format( saveFigAs ) )
+plt.savefig( saveFigAs, dpi = 300 )
+print( '\n  Saved {:}'.format( saveFigAs ) )
 
 plt.close()
 
