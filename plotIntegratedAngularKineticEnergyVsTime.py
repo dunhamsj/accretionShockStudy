@@ -11,7 +11,7 @@ from UtilitiesModule import GetFileArray, GetData
 rootDirectory \
   = '/lump/data/accretionShockStudy/newData/2D/'
 
-ID = '2D_M2.8_Rpns020_Rs8.75e1'
+ID = '2D_M1.4_Rpns040_Rs1.80e2_TCI5.00e-3'
 
 field = 'AngularKineticEnergy'
 
@@ -27,8 +27,8 @@ verbose = True
 
 ### Integrate
 
-plotfileBaseNameGR = 'GR' + ID + '.plt'
-plotfileDirectoryGR = rootDirectory + 'GR' + ID + '/'
+plotfileBaseNameGR = 'NR' + ID + '.plt'
+plotfileDirectoryGR = rootDirectory + 'NR' + ID + '/'
 plotfileArrayGR = GetFileArray( plotfileDirectoryGR, plotfileBaseNameGR )
 plotfileArrayGR = np.copy( plotfileArrayGR[:-1] )
 
@@ -99,7 +99,7 @@ for i in range( nT ):
 
     time, GR = np.loadtxt( 'GR_{:}_{:}.dat'.format( ID, i ) )
     time, NR = np.loadtxt( 'NR_{:}_{:}.dat'.format( ID, i ) )
-    ax.plot( time, NR - GR, \
+    ax.plot( time, NR, \
              label \
                = r'$\theta/\pi={:}$' \
                  .format( np.round( X2[0,ind[i],0] / np.pi, 2 ) ) )
@@ -107,19 +107,24 @@ for i in range( nT ):
 ax.grid()
 ax.legend()
 
-if zScale == 'log': ax.set_yscale( 'symlog', linthresh = 1.0e40 )
+#if zScale == 'log': ax.set_yscale( 'symlog', linthresh = 1.0e40 )
+if zScale == 'log': ax.set_yscale( 'log' )
 
 #ax.set_ylim( 1.0e26, 1.0e45 )
 #ax.set_xlim( -1.0, 55.0 )
 ax.set_xlabel( r'$t\ \left[\mathrm{ms}\right]$' )
-ax.set_ylabel( r'$\frac{1}{\sin\theta}\int_{R_{\mathrm{PNS}}}^{1.5\,R_{\mathrm{S}}}\left(\tau^{\theta}_{\mathrm{NR}}-\tau^{\theta}_{\mathrm{GR}}\right)\sqrt{\gamma}\,dr$' )
-ax.text( 40, 1.0e30, \
-         r'$\tau^{\theta}:=\frac{S^{2}S_{2}}{2\,D}$', fontsize = 15 )
+#ax.set_ylabel( r'$\frac{1}{\sin\theta}\int_{R_{\mathrm{PNS}}}^{1.5\,R_{\mathrm{S}}}\left(\tau^{\theta}_{\mathrm{NR}}-\tau^{\theta}_{\mathrm{GR}}\right)\sqrt{\gamma}\,dr$' )
+ax.set_ylabel( r'$\frac{1}{\sin\theta}\int_{R_{\mathrm{PNS}}}^{1.5\,R_{\mathrm{S}}}\tau^{\theta}_{\mathrm{NR}}\sqrt{\gamma}\,dr$' )
+ax.text( 0.6, 0.1, \
+         r'$\tau^{\theta}:=\frac{S^{2}S_{2}}{2\,D}$', \
+         fontsize = 15, transform = ax.transAxes)
 
-#plt.show()
+ax.axvline( 12.7, c = 'k' )
+ax.set_title( r'$\texttt{{{:}}}$'.format( ID ) )
+plt.show()
 
-plt.savefig( saveFigAs, dpi = 300 )
-print( '\n  Saved {:}'.format( saveFigAs ) )
+#plt.savefig( saveFigAs, dpi = 300 )
+#print( '\n  Saved {:}'.format( saveFigAs ) )
 
 plt.close()
 
