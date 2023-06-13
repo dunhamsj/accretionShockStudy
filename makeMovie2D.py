@@ -21,21 +21,23 @@ Usage:
 #### ========== User Input ==========
 
 # ID to be used for naming purposes
-ID = 'NR2D_M1.4_Rpns040_Rs1.80e2'
+ID = 'GR2D_M1.4_Rpns040_Rs1.20e2'
 
 # Directory containing AMReX plotfiles
 plotfileDirectory \
   = '/lump/data/accretionShockStudy/newData/2D/{:}/'.format( ID )
+#plotfileDirectory \
+#  = '/home/kkadoogan/{:}/'.format( ID )
 
 # plotfile base name (e.g., Advection2D.plt######## -> Advection2D.plt )
 plotfileBaseName = ID + '.plt'
 
 # Field to plot
-field = 'PF_V2'
+field = 'DF_TCI'
 
 # Scale of colorbar
-zScale = 'None'
-#zScale = 'log'
+#zScale = 'None'
+zScale = 'log'
 #zScale = 'symlog'
 linthresh = 1.0e-2
 
@@ -43,10 +45,11 @@ linthresh = 1.0e-2
 CoordinateSystem = 'cartesian'
 
 # Only use every <plotEvery> plotfile
-plotEvery = 10
+plotEvery   = 1
+maxPlotfile = 900
 
 # Colormap
-cmap = 'RdBu'
+cmap = 'viridis'
 
 # First and last snapshots and number of snapshots to include in movie
 SSi = -1 # -1 -> SSi = 0
@@ -54,8 +57,8 @@ SSf = -1 # -1 -> plotfileArray.shape[0] - 1
 nSS = -1 # -1 -> plotfileArray.shape[0]
 
 UseCustomLimits = True
-vmin = -1.0e-5
-vmax = -vmin
+vmin = 1.0e-7
+vmax = 1.0e0
 
 MovieRunTime = 10.0 # seconds
 
@@ -82,6 +85,7 @@ plotfileArray \
                   UsePhysicalUnits = True, \
                   MaxLevel = -1, Verbose = Verbose )
 plotfileArray = np.copy( plotfileArray[::plotEvery] )
+plotfileArray = np.copy( plotfileArray[0:maxPlotfile] )
 
 def f(t):
 

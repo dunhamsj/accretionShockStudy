@@ -43,7 +43,7 @@ def MakeDataFile( Field, PlotfileDirectory, DataDirectory, \
 
     owD = Overwrite( DataDirectory, ForceChoice = forceChoiceD, OW = owD )
 
-    nProc = 4#max( 1, cpu_count() // 2 )
+    nProc = max( 1, cpu_count() // 2 )
 
     if owD:
 
