@@ -416,6 +416,39 @@ def GetData( DataDirectory, PlotFileBaseName, Field, \
 
     # --- Derived Fields ---
 
+    elif Field == 'NRQ':
+
+        D  = np.copy( CoveringGrid['CF_D'    ].to_ndarray() )
+        S1 = np.copy( CoveringGrid['CF_S1'   ].to_ndarray() )
+        S2 = np.copy( CoveringGrid['CF_S2'   ].to_ndarray() )
+        S3 = np.copy( CoveringGrid['CF_S3'   ].to_ndarray() )
+        g1 = np.copy( CoveringGrid['GF_Gm_11'].to_ndarray() )
+        g2 = np.copy( CoveringGrid['GF_Gm_22'].to_ndarray() )
+        g3 = np.copy( CoveringGrid['GF_Gm_33'].to_ndarray() )
+        E  = np.copy( CoveringGrid['CF_E'    ].to_ndarray() )
+
+        SSq = S1**2 / g1 + S2**2 / g2 + S3**2 / g3
+
+        Data = E - 0.5 * SSq / D
+
+        DataUnits = 'erg/cm^3'
+
+    elif Field == 'QinQ':
+
+        D  = np.copy( CoveringGrid['CF_D'    ].to_ndarray() )
+        S1 = np.copy( CoveringGrid['CF_S1'   ].to_ndarray() )
+        S2 = np.copy( CoveringGrid['CF_S2'   ].to_ndarray() )
+        S3 = np.copy( CoveringGrid['CF_S3'   ].to_ndarray() )
+        g1 = np.copy( CoveringGrid['GF_Gm_11'].to_ndarray() )
+        g2 = np.copy( CoveringGrid['GF_Gm_22'].to_ndarray() )
+        g3 = np.copy( CoveringGrid['GF_Gm_33'].to_ndarray() )
+        E  = np.copy( CoveringGrid['CF_E'    ].to_ndarray() )
+
+        SSq = S1**2 / g1 + S2**2 / g2 + S3**2 / g3
+
+        Data = E + D - np.sqrt( SSq + D**1 )
+        DataUnits = 'erg/cm^3'
+
     elif Field == 'AngularKineticEnergy':
 
         D  = np.copy( CoveringGrid['CF_D'    ].to_ndarray() )

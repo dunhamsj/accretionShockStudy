@@ -21,35 +21,35 @@ Usage:
 #### ========== User Input ==========
 
 # ID to be used for naming purposes
-ID = 'GR2D_M1.4_Rpns040_Rs1.20e2'
+ID = 'NR2D_M1.4_Rpns040_Rs1.80e2_TCI5.00e-3'
 
 # Directory containing AMReX plotfiles
-plotfileDirectory \
-  = '/lump/data/accretionShockStudy/newData/2D/{:}/'.format( ID )
 #plotfileDirectory \
-#  = '/home/kkadoogan/{:}/'.format( ID )
+#  = '/lump/data/accretionShockStudy/newData/2D/{:}/'.format( ID )
+plotfileDirectory \
+  = '/home/kkadoogan/{:}/'.format( ID )
 
 # plotfile base name (e.g., Advection2D.plt######## -> Advection2D.plt )
 plotfileBaseName = ID + '.plt'
 
 # Field to plot
-field = 'DF_TCI'
+field = 'PF_E'
 
 # Scale of colorbar
 #zScale = 'None'
-zScale = 'log'
-#zScale = 'symlog'
-linthresh = 1.0e-2
+#zScale = 'log'
+zScale = 'symlog'
+linthresh = 1.0e27
 
 # Coordinate system (currently supports 'cartesian' and 'spherical' )
 CoordinateSystem = 'cartesian'
 
 # Only use every <plotEvery> plotfile
 plotEvery   = 1
-maxPlotfile = 900
+maxPlotfile = -1
 
 # Colormap
-cmap = 'viridis'
+cmap = 'RdBu'
 
 # First and last snapshots and number of snapshots to include in movie
 SSi = -1 # -1 -> SSi = 0
@@ -57,8 +57,8 @@ SSf = -1 # -1 -> plotfileArray.shape[0] - 1
 nSS = -1 # -1 -> plotfileArray.shape[0]
 
 UseCustomLimits = True
-vmin = 1.0e-7
-vmax = 1.0e0
+vmin = 1.0e28
+vmax = -vmin
 
 MovieRunTime = 10.0 # seconds
 
@@ -212,8 +212,8 @@ if CoordinateSystem == 'spherical':
 
     ax.set_thetamin( 0.0 )
     ax.set_thetamax( 180.0 )
-    ax.set_rmin( 170.0 )
-    ax.set_rmax( 190.0 )
+    ax.set_rmin( 40.0 )
+    ax.set_rmax( 125.0 )
 
     ax.set_theta_zero_location( 'N' ) # z-axis vertical
     ax.set_theta_direction( -1 )
