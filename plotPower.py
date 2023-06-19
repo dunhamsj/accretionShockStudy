@@ -42,6 +42,9 @@ elif stage == 'late':
     # RsMax < 1.45 * Rs(t=0)
     indd[:,:] = -1
     suffix = ''
+    Rs   = np.array( [ '9.00e1', '9.00e1' ], str )
+    indd[:,:] = -1
+    suffix = ''
 
 else:
 

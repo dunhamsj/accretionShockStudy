@@ -21,28 +21,28 @@ Usage:
 #### ========== User Input ==========
 
 # ID to be used for naming purposes
-ID = 'NR2D_M1.4_Rpns040_Rs1.80e2_TCI5.00e-3'
+ID = 'GR2D_M2.8_Rpns020_Rs9.00e1'
 
 # Directory containing AMReX plotfiles
-#plotfileDirectory \
-#  = '/lump/data/accretionShockStudy/newData/2D/{:}/'.format( ID )
 plotfileDirectory \
-  = '/home/kkadoogan/{:}/'.format( ID )
+  = '/lump/data/accretionShockStudy/newData/2D/{:}/'.format( ID )
+#plotfileDirectory \
+#  = '/home/kkadoogan/{:}/'.format( ID )
 
 # plotfile base name (e.g., Advection2D.plt######## -> Advection2D.plt )
 plotfileBaseName = ID + '.plt'
 
 # Field to plot
-field = 'PF_E'
+field = 'DivV2'
 
 # Scale of colorbar
-#zScale = 'None'
+zScale = 'None'
 #zScale = 'log'
-zScale = 'symlog'
+#zScale = 'symlog'
 linthresh = 1.0e27
 
 # Coordinate system (currently supports 'cartesian' and 'spherical' )
-CoordinateSystem = 'cartesian'
+CoordinateSystem = 'spherical'
 
 # Only use every <plotEvery> plotfile
 plotEvery   = 1
@@ -56,7 +56,7 @@ SSi = -1 # -1 -> SSi = 0
 SSf = -1 # -1 -> plotfileArray.shape[0] - 1
 nSS = -1 # -1 -> plotfileArray.shape[0]
 
-UseCustomLimits = True
+UseCustomLimits = False
 vmin = 1.0e28
 vmax = -vmin
 
