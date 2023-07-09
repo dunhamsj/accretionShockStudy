@@ -21,7 +21,7 @@ Usage:
 #### ========== User Input ==========
 
 # ID to be used for naming purposes
-ID = 'GR2D_M2.8_Rpns020_Rs9.00e1'
+ID = 'NR2D_M2.8_Rpns020_Rs6.00e1'
 
 # Directory containing AMReX plotfiles
 plotfileDirectory \
@@ -33,13 +33,13 @@ plotfileDirectory \
 plotfileBaseName = ID + '.plt'
 
 # Field to plot
-field = 'DivV2'
+field = 'PF_V2'
 
 # Scale of colorbar
-zScale = 'None'
+#zScale = 'None'
 #zScale = 'log'
-#zScale = 'symlog'
-linthresh = 1.0e27
+zScale = 'symlog'
+linthresh = 1.0e-4#1.0e27
 
 # Coordinate system (currently supports 'cartesian' and 'spherical' )
 CoordinateSystem = 'spherical'
@@ -56,8 +56,8 @@ SSi = -1 # -1 -> SSi = 0
 SSf = -1 # -1 -> plotfileArray.shape[0] - 1
 nSS = -1 # -1 -> plotfileArray.shape[0]
 
-UseCustomLimits = False
-vmin = 1.0e28
+UseCustomLimits = True
+vmin = 1.0e0
 vmax = -vmin
 
 MovieRunTime = 10.0 # seconds
@@ -134,8 +134,6 @@ fig = plt.figure()
 ax  = fig.add_subplot( 111, polar = polar )
 ax.set_title( r'$\texttt{{{:}}}$'.format( ID ) )
 
-time_text = ax.text( 0.6, 0.9, '', transform = ax.transAxes )
-
 X1c, X2c = MapCenterToCorners( X1_C, X2_C, dX1, dX2 )
 
 if CoordinateSystem == 'spherical':
@@ -171,10 +169,11 @@ im = ax.pcolormesh( X1c, X2c, Data0, \
                     norm = Norm, \
                     shading = 'flat' )
 
-time_text = ax.text( 0.4, 0.9, '', transform = ax.transAxes )
+time_text = ax.text( 0.6, 0.9, '', transform = ax.transAxes )
 
 cbar = fig.colorbar( im )
-cbar.set_label( field + ' ' + r'$\mathrm{{{:}}}$'.format( DataUnits[1:-1] ) )
+#cbar.set_label( field + ' ' + r'$\mathrm{{{:}}}$'.format( DataUnits[1:-1] ) )
+cbar.set_label( r'$v^{\theta}\,\left[\mathrm{s}^{-1}\right]$' )
 
 def InitializeFrame():
 
@@ -212,8 +211,8 @@ if CoordinateSystem == 'spherical':
 
     ax.set_thetamin( 0.0 )
     ax.set_thetamax( 180.0 )
-    ax.set_rmin( 40.0 )
-    ax.set_rmax( 125.0 )
+    ax.set_rmin( 0.0 )
+    ax.set_rmax( 90.0 )
 
     ax.set_theta_zero_location( 'N' ) # z-axis vertical
     ax.set_theta_direction( -1 )
