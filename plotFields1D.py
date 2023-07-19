@@ -8,16 +8,16 @@ from UtilitiesModule import GetFileArray, GetData
 
 #### ========== User Input ==========
 
-#rootDirectory \
-#  = '/home/kkadoogan/Work/Codes/thornado/SandBox/AMReX/Applications/\
-#StandingAccretionShock_Relativistic/'
+
+ID = 'StandingAccretionShock_Relativistic'
+
 rootDirectory \
-  = '/lump/data/accretionShockStudy/newData/1D/'
+  = '/home/kkadoogan/Work/Codes/thornado/SandBox/AMReX/Applications/\
+{:}/'.format( ID )
+#rootDirectory \
+#  = '/lump/data/accretionShockStudy/newData/1D/'
 
-ID = '1D_M1.4_Rpns040_Rs1.20e2'
-#ID = '1D_M2.8_Rpns020_Rs6.00e1'
-
-field = 'AF_P'
+field = 'PF_D'
 
 # Scale of colorbar
 #zScale = 'None'
@@ -35,28 +35,27 @@ verbose = True
 
 fig, ax  = plt.subplots( 1, 1 )
 
-GRID = 'GR' + ID
+GRID = ID
 plotfileBaseName = GRID + '.plt'
-plotfileDirectory = rootDirectory + GRID + '/'
-plotfileArray = GetFileArray( plotfileDirectory, plotfileBaseName )
-plotfile      = plotfileDirectory + plotfileArray[0]
+plotfileDirectory = rootDirectory + GRID + '_new/'
 dataGR, dataUnits, \
 X1, X2, X3, dX1, dX2, dX3, xL, xH, nX \
   = GetData( plotfileDirectory, plotfileBaseName, field, \
-             'spherical', True, \
+             'spherical', True, argv = ['a'], \
              ReturnTime = False, ReturnMesh = True )
-NRID = 'NR' + ID
-plotfileBaseName = NRID + '.plt'
-plotfileDirectory = rootDirectory + NRID + '/'
-plotfileArray = GetFileArray( plotfileDirectory, plotfileBaseName )
-plotfile      = plotfileDirectory + plotfileArray[0]
-dataNR, dataUnits, \
+ax.plot( X1[:,0,0], dataGR[:,0,0], '.', label = 'new' )
+
+GRID = ID
+plotfileBaseName = GRID + '.plt'
+plotfileDirectory = rootDirectory + GRID + '_old/'
+dataGR, dataUnits, \
 X1, X2, X3, dX1, dX2, dX3, xL, xH, nX \
   = GetData( plotfileDirectory, plotfileBaseName, field, \
-             'spherical', True, \
+             'spherical', True, argv = ['a'], \
              ReturnTime = False, ReturnMesh = True )
-ax.plot( X1[:,0,0], dataNR[:,0,0]/dataGR[:,0,0] )
+ax.plot( X1[:,0,0], dataGR[:,0,0], '.', label = 'old' )
 
+ax.legend()
 ax.grid()
 
 ax.set_title( r'$\texttt{{{:}}}$'.format( ID ) )
@@ -65,13 +64,17 @@ if zScale == 'symlog':
 else:
     ax.set_yscale( zScale )
 
+xRef = [ 1.55e2, 1.25e2, 5.0e1 ]
+for xx in xRef:
+    ax.axvline( xx, c = 'b' )
+
 ax.set_xlabel( r'$r\ \left[\mathrm{km}\right]$' )
 ax.set_ylabel( r'$p_{\mathrm{NR}}/p_{\mathrm{GR}}$' )
 
-plt.savefig( saveFigAs, dpi = 300 )
-print( '\n  Saved {:}'.format( saveFigAs ) )
+#plt.savefig( saveFigAs, dpi = 300 )
+#print( '\n  Saved {:}'.format( saveFigAs ) )
 
-#plt.show()
+plt.show()
 plt.close()
 
 import os
