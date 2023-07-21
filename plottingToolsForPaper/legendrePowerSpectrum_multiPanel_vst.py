@@ -130,8 +130,11 @@ for rpns in range( len( Rpns ) ):
         ax.set_ylabel( r'$H_{1}$ [cgs]', fontsize = 14 )
 
         #plt.show()
+        #plt.savefig \
+        #( '../Figures/fig.LegendrePowerSpectrum_vst_{:}.pdf' \
+        #  .format( ID[5:] ), dpi = 300 )
         plt.savefig \
-        ( '../Figures/fig.LegendrePowerSpectrum_vst_{:}.pdf' \
+        ( '/home/kkadoogan/fig.LegendrePowerSpectrum_vst_{:}.png' \
           .format( ID[5:] ), dpi = 300 )
         plt.close()
 
