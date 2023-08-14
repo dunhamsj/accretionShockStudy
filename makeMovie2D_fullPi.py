@@ -45,7 +45,7 @@ linthresh = 1.0e-4#1.0e27
 CoordinateSystem = 'spherical'
 
 # Only use every <plotEvery> plotfile
-plotEvery   = 10
+plotEvery   = 1
 maxPlotfile = -1
 
 # Colormap
@@ -106,6 +106,37 @@ def f(t):
     dX1  = np.loadtxt( dX1File  ).reshape( np.int64( DataShape ) )
     dX2  = np.loadtxt( dX2File  ).reshape( np.int64( DataShape ) )
     Data = np.loadtxt( DataFile )
+
+    shape = ( X2_C.shape[0], 2*X2_C.shape[1] )
+
+    X22_C = np.empty( shape, np.float64 )
+    dX22  = np.empty( shape, np.float64 )
+    X11_C = np.empty( shape, np.float64 )
+    dX11  = np.empty( shape, np.float64 )
+    Dataa = np.empty( shape, np.float64 )
+
+    for iX1 in range( shape[0] ):
+
+        X22_C[iX1,0 :64] = np.copy( X2_C[iX1]       )
+        X22_C[iX1,64:  ] = np.copy( X2_C[iX1] + np.pi )
+        dX22 [iX1,0 :64] = np.copy( dX2 [iX1]       )
+        dX22 [iX1,64:  ] = np.copy( dX2 [iX1][::-1] )
+
+        X11_C[iX1,0 :64] = np.copy( X1_C[iX1] )
+        X11_C[iX1,64:  ] = np.copy( X1_C[iX1] )
+        dX11 [iX1,0 :64] = np.copy( dX1 [iX1] )
+        dX11 [iX1,64:  ] = np.copy( dX1 [iX1] )
+
+        Dataa[iX1,0 :64] = np.copy( Data[iX1]       )
+        Dataa[iX1,64:  ] = np.copy( Data[iX1][::-1] )
+
+    X2_C = np.copy( X22_C )
+    dX2  = np.copy( dX22 )
+
+    X1_C = np.copy( X11_C )
+    dX1  = np.copy( dX11 )
+
+    Data = np.copy( Dataa )
 
     return Data, DataUnits, X1_C, X2_C, dX1, dX2, Time
 
@@ -169,7 +200,7 @@ im = ax.pcolormesh( X1c, X2c, Data0, \
                     norm = Norm, \
                     shading = 'flat' )
 
-time_text = ax.text( 0.6, 0.9, '', transform = ax.transAxes )
+time_text = ax.text( 0.3, 0.9, '', c = 'w', transform = ax.transAxes )
 
 cbar = fig.colorbar( im )
 #cbar.set_label( field + ' ' + r'$\mathrm{{{:}}}$'.format( DataUnits[1:-1] ) )
@@ -190,7 +221,7 @@ def UpdateFrame(t):
     Data, DataUnits, X1_C, X2_C, dX1, dX2, Time = f(t)
 
     im.set_array( Data.flatten() )
-    time_text.set_text( r'$t={:.3e}\ \left[\mathrm{{ms}}\right]$' \
+    time_text.set_text( r'$t={:.3e}\ \mathrm{{ms}}$' \
                         .format( Time ) )
 
     ret = ( im, time_text )
@@ -211,7 +242,7 @@ print( '  ------------' )
 if CoordinateSystem == 'spherical':
 
     ax.set_thetamin( 0.0 )
-    ax.set_thetamax( 180.0 )
+    ax.set_thetamax( 360.0 )
     ax.set_rmin( 0.0 )
     ax.set_rmax( 90.0 )
 

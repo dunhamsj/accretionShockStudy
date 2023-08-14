@@ -356,6 +356,11 @@ def GetData( DataDirectory, PlotFileBaseName, Field, \
         Data = np.copy( CoveringGrid[Field].to_ndarray() )
         DataUnits = 'km/s'
 
+    elif Field == 'GF_Phi_N':
+
+        Data = np.copy( CoveringGrid[Field].to_ndarray() )
+        DataUnits = 'erg/g'
+
     elif Field == 'GF_Gm_11':
 
         Data = np.copy( CoveringGrid[Field].to_ndarray() )
@@ -652,7 +657,7 @@ def GetData( DataDirectory, PlotFileBaseName, Field, \
         p   = np.copy( CoveringGrid['AF_P'].to_ndarray() )
         rho = np.copy( CoveringGrid['PF_D'].to_ndarray() )
 
-        Data = ( c**2 + ( e + p ) / rho ) / c**2
+        Data = c**2 + ( e + p ) / rho
 
         DataUnits = ''
 
