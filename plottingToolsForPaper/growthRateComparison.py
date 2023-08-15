@@ -105,10 +105,10 @@ ax.text( 60 , 0.05, r'$\texttt{M2.8}$', fontsize = 15 )
 ax.text( 140, 0.10, r'$\texttt{M1.4}$', fontsize = 15 )
 
 ax.tick_params( which = 'both', top = True, right = True )
-ax.set_xlabel( r'$R_{\textsc{s}}\ \left[\mathrm{km}\right]$' )
+ax.set_xlabel( r'$R_{\textrm{sh}}\ \left[\mathrm{km}\right]$' )
 ax.set_ylabel( r'$\omega\ \left[\mathrm{ms}^{-1}\right]$' )
-plt.show()
-#plt.savefig( '../Figures/fig.GrowthRateComparison.pdf', dpi = 300 )
+#plt.show()
+plt.savefig( '/home/kkadoogan/Work/accretionShockPaper/Figures/fig.GrowthRateComparison.pdf', dpi = 300 )
 plt.close()
 
 import os

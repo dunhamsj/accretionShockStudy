@@ -160,10 +160,10 @@ ax.text( 60 , 20, r'$\texttt{M2.8}$', fontsize = 15 )
 ax.text( 140, 5 , r'$\texttt{M1.4}$', fontsize = 15 )
 
 ax.tick_params( which = 'both', top = True, right = True )
-ax.set_xlabel( r'$R_{\textsc{s}}\ \left[\mathrm{km}\right]$' )
+ax.set_xlabel( r'$R_{\textrm{sh}}\ \left[\mathrm{km}\right]$' )
 ax.set_ylabel( r'$T\ \left[\mathrm{ms}\right]$' )
 #plt.show()
-plt.savefig( '../Figures/fig.OscillationPeriodComparison.pdf', dpi = 300 )
+plt.savefig( '/home/kkadoogan/Work/accretionShockPaper/Figures/fig.OscillationPeriodComparison.pdf', dpi = 300 )
 #plt.savefig( 'fig.OscillationPeriodComparison.png', dpi = 300 )
 plt.close()
 

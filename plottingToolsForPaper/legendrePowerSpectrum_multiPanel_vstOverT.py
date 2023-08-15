@@ -78,7 +78,7 @@ for rpns in range( len( Rpns ) ):
             axs[s,r].plot( t[ind] / TSASI, P1[ind], '-', \
                            color = color[rs], \
                            label = r'$\texttt{{{:}}}$' \
-                                   .format( ID.replace('2D','') ) )
+                                   .format( ID.replace('2D','').replace('Rs','Rsh') ) )
 
         axs[s,r].set_yscale( 'log' )
 
@@ -102,7 +102,7 @@ plt.subplots_adjust( hspace = 0.0, wspace = 0.0 )
 
 #plt.show()
 plt.savefig \
-  ( '../Figures/fig.LegendrePowerSpectrum_MultiPanel_vstOverT.pdf', \
+  ( '/home/kkadoogan/Work/accretionShockPaper/Figures/fig.LegendrePowerSpectrum_MultiPanel_vstOverT.pdf', \
     dpi = 300 )
 
 import os

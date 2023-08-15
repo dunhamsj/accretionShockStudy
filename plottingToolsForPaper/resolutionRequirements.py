@@ -18,7 +18,7 @@ if __name__ == "__main__":
     nX   = [ '0140', '0280', '0560', '1120' ]
     Rpns = 4.00e1
     Rs   = 1.20e2
-    text = r'$\texttt{GR1D\_M1.4\_Rpns040\_Rs1.20e2}$'
+    text = r'$\texttt{GR1D\_M1.4\_Rpns040\_Rsh1.20e2}$'
 
     for i in range( len( nX ) ):
 
@@ -38,7 +38,7 @@ if __name__ == "__main__":
         axs[0].plot( Time / tauAd, ( RsAve - RsAve[0] ) / RsAve[0], \
                      label = lab )
 
-    axs[0].text( 0.08, 0.87, text, \
+    axs[0].text( 0.06, 0.87, text, \
                  transform = axs[0].transAxes, fontsize = 13 )
 
     axs[0].tick_params \
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     nX   = [ '0140', '0280', '0560', '1120' ]
     Rpns = 2.00e1
     Rs   = 6.00e1
-    text = r'$\texttt{GR1D\_M2.8\_Rpns020\_Rs6.00e1}$'
+    text = r'$\texttt{GR1D\_M2.8\_Rpns020\_Rsh6.00e1}$'
 
     for i in range( len( nX ) ):
 
@@ -82,7 +82,7 @@ if __name__ == "__main__":
         axs[1].plot( Time / tauAd, ( RsAve - RsAve[0] ) / RsAve[0], \
                      label = lab )
 
-    axs[1].text( 0.08, 0.87, text, \
+    axs[1].text( 0.06, 0.87, text, \
                  transform = axs[1].transAxes, fontsize = 13 )
 
     axs[1].tick_params \
@@ -102,14 +102,14 @@ if __name__ == "__main__":
 
     axs[1].legend( loc = (0.6,0.53) )
 
-    ylabel = r'$\left(R_{s}\left(t\right)-R_{s}\left(0\right)\right)$' \
-               + r'$/R_{s}\left(0\right)$'
+    ylabel = r'$\left(R_{\mathrm{sh}}\left(t\right)-R_{\mathrm{sh}}\left(0\right)\right)$' \
+               + r'$/R_{\mathrm{sh}}\left(0\right)$'
     fig.supylabel( ylabel )
 
     plt.subplots_adjust( hspace = 0 )
 
     #plt.show()
-    plt.savefig( '../Figures/fig.RadialResolution.pdf', dpi = 300 )
+    plt.savefig( '/home/kkadoogan/Work/accretionShockPaper/Figures/fig.RadialResolution.pdf', dpi = 300 )
 
     plt.close()
 

@@ -26,7 +26,7 @@ if __name__ == "__main__":
     nXX  = 280
     Rs   = 1.20e2
     Rpns = 4.00e1
-    text = r'$\texttt{GR1D\_M1.4\_Rpns040\_Rs1.20e2}$'
+    text = r'$\texttt{GR1D\_M1.4\_Rpns040\_Rsh1.20e2}$'
     ylim = 1.0e-6
 
     ID = IDD + '_nX{:}'.format( str( nXX ).zfill( 4 ) )
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     nXX  = 280
     Rs   = 6.00e1
     Rpns = 2.00e1
-    text = r'$\texttt{GR1D\_M2.8\_Rpns020\_Rs6.00e1}$'
+    text = r'$\texttt{GR1D\_M2.8\_Rpns020\_Rsh6.00e1}$'
     ylim = 1.0e-13
 
     ID = IDD + '_nX{:}'.format( str( nXX ).zfill( 4 ) )
@@ -101,7 +101,7 @@ if __name__ == "__main__":
     axs[1].set_xlabel( r'$t/\tau_{\mathrm{ad}}$', fontsize = 15 )
 
     ylabel \
-    = r'$\max\limits_{r\in\left[R_{\mathrm{PNS}},1.5\,R_{\mathrm{S}}\right]}\left|\dot{\rho}\left(t\right)/\rho\left(t\right)\right|$' \
+    = r'$\max\limits_{r\in\left[R_{\mathrm{PNS}},1.5\,R_{\mathrm{sh}}\right]}\left|\dot{\rho}\left(t\right)/\rho\left(t\right)\right|$' \
                + r'$\ \left[\mathrm{ms}^{-1}\right]$'
     fig.supylabel( ylabel, x = -0.01, fontsize = 15 )
 
@@ -110,7 +110,7 @@ if __name__ == "__main__":
     plt.subplots_adjust( hspace = 0 )
 
     #plt.show()
-    plt.savefig( '../Figures/fig.Relaxation.pdf', dpi = 300 )
+    plt.savefig( '/home/kkadoogan/Work/accretionShockPaper/Figures/fig.Relaxation.pdf', dpi = 300 )
 
     plt.close()
 

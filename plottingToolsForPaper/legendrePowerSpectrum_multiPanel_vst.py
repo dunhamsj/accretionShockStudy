@@ -87,7 +87,8 @@ for rpns in range( len( Rpns ) ):
                 ax.plot( t[ind], P1[ind], '-', \
                          color = color[r] )
 
-        ax.set_title( r'$\texttt{{{:}}}$'.format( ID[5:] ), \
+        IDD = ID.replace( 'Rs', 'Rsh' )
+        ax.set_title( r'$\texttt{{{:}}}$'.format( IDD[5:] ), \
                       fontsize = 9 )
 
         ax.set_yscale( 'log' )
@@ -130,12 +131,9 @@ for rpns in range( len( Rpns ) ):
         ax.set_ylabel( r'$H_{1}$ [cgs]', fontsize = 14 )
 
         #plt.show()
-        #plt.savefig \
-        #( '../Figures/fig.LegendrePowerSpectrum_vst_{:}.pdf' \
-        #  .format( ID[5:] ), dpi = 300 )
         plt.savefig \
-        ( '/home/kkadoogan/fig.LegendrePowerSpectrum_vst_{:}.png' \
-          .format( ID[5:] ), dpi = 300 )
+        ( '/home/kkadoogan/Work/accretionShockPaper/Figures/fig.LegendrePowerSpectrum_vst_{:}.pdf' \
+          .format( IDD[5:] ), dpi = 300 )
         plt.close()
 
 import os

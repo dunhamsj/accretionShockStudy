@@ -16,11 +16,11 @@ Mpns_s = argv[1]
 Mpns = np.float64( Mpns_s )
 
 if  ( Mpns == 1.4 ):
-    Rsh = np.array( [   '1.20e2',   '1.50e2',   '1.75e2' ], str )
-    lab = np.array( [ 'Rs1.20e2', 'Rs1.50e2', 'Rs1.75e2' ], str )
+    Rsh = np.array( [    '1.20e2',    '1.50e2',    '1.75e2' ], str )
+    lab = np.array( [ 'Rsh1.20e2', 'Rsh1.50e2', 'Rsh1.75e2' ], str )
 elif( Mpns == 2.8 ):
-    Rsh = np.array( [   '6.00e1',   '7.00e1' ], str )
-    lab = np.array( [ 'Rs6.00e1', 'Rs7.00e1' ], str )
+    Rsh = np.array( [    '6.00e1',    '7.00e1' ], str )
+    lab = np.array( [ 'Rsh6.00e1', 'Rsh7.00e1' ], str )
 
 IDs = [ '1D_M{:.1f}_Rpns003_Rs{:}'.format( Mpns, r ) for r in Rsh ]
 
@@ -35,7 +35,7 @@ ax01ylabel = r'$v/v_{1}$'
 ax10ylabel = r'$p/\left(\rho_{1}\,v_{1}^{2}\right)$'
 ax11ylabel = r'$\alpha/\alpha_{1}$'
 
-saveFigAs = '../Figures/fig.CompareNRvsGR_SS_M{:.1f}.pdf'.format( Mpns )
+saveFigAs = '/home/kkadoogan/Work/accretionShockPaper/Figures/fig.CompareNRvsGR_SS_M{:.1f}.pdf'.format( Mpns )
 
 verbose = False
 
@@ -218,7 +218,7 @@ axs[1,0].set_yscale( 'log' )
 axs[1,1].text( 0.625, 0.775, r'$\texttt{{M{:.1f}}}$'.format( Mpns ), \
                transform = axs[1,1].transAxes, fontsize = 14 )
 
-axs[1,1].legend( loc = (0.45,0.10), prop = { 'size' : 10 } )
+axs[1,1].legend( loc = (0.43,0.10), prop = { 'size' : 10 } )
 
 y11ticks = np.array( [ 0.90, 0.95, 1.00 ], np.float64 )
 

@@ -152,7 +152,7 @@ for m in range( len( M ) ):
         rOuter = np.float64( Rs[m][rs] )
 
         ax.set_title \
-          ( r'$\texttt{{M{:}_Rpns{:}_Rs{:}}}$' \
+          ( r'$\texttt{{M{:}_Rpns{:}_Rsh{:}}}$' \
             .format( M[m], Rpns[m], Rs[m][rs] ), fontsize = 9 )
 
         yyNR   = np.abs( yNR   / yNR  .max() )
@@ -208,7 +208,8 @@ for m in range( len( M ) ):
           ( r'$\widetilde{T}\ \left[\mathrm{ms}\right]$', fontsize = 14 )
 
 #        plt.show()
-        plt.savefig( '../Figures/fig.FFT_{:}.pdf'.format( ID[3:] ), dpi = 300 )
+        IDD = ID.replace( 'Rs', 'Rsh' )
+        plt.savefig( '/home/kkadoogan/Work/accretionShockPaper/Figures/fig.FFT_{:}.pdf'.format( IDD[3:] ), dpi = 300 )
         plt.close()
         with open( '../plottingData/fft.dat', 'a' ) as f:
             f.write( '{:} {:.16e} {:.16e}\n' \

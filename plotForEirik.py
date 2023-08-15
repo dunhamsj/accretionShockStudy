@@ -9,8 +9,8 @@ from UtilitiesModule import GetFileArray, GetData
 #### ========== User Input ==========
 
 
-#ID = '1D_M2.8_Rpns020_Rs6.00e1'
-ID = '1D_M1.4_Rpns040_Rs1.20e2'
+ID = '1D_M2.8_Rpns020_Rs6.00e1'
+#ID = '1D_M1.4_Rpns040_Rs1.20e2'
 
 rootDirectory \
   = '/lump/data/accretionShockStudy/newData/1D/'
@@ -73,8 +73,8 @@ ax.set_ylim( ylim )
 ax.plot( X1[:,0,0], alphaGR[:,0,0], 'k-' , label = r'$\alpha$' )
 ax.plot( X1[:,0,0], alphaNR[:,0,0], 'r-' , label = r'$\alpha_{\mathrm{N}}$' )
 ax.plot( X1[:,0,0], hGR    [:,0,0], 'k--', label = r'$h/c^{2}$' )
-ax.plot( X1[:,0,0], psiGR  [:,0,0], 'k-.', label = r'$\psi$' )
-ax.plot( X1[:,0,0], psiNR  [:,0,0], 'r-.', label = r'$\psi_{\mathrm{N}}$' )
+#ax.plot( X1[:,0,0], psiGR  [:,0,0], 'k-.', label = r'$\psi$' )
+#ax.plot( X1[:,0,0], psiNR  [:,0,0], 'r-.', label = r'$\psi_{\mathrm{N}}$' )
 ax.plot( X1[:,0,0], WGR    [:,0,0], 'k:' , label = r'$W$' )
 
 ax.legend()

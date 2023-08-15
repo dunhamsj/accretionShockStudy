@@ -158,7 +158,7 @@ for m in range( len( M ) ):
               = max( reldiff_ac_HC, \
                      abs( TGR - T_ac_GR ) / ( 0.5 * ( TGR + T_ac_GR ) ) )
 
-        table += '  \\texttt{{NR\_M{:}\\_Rpns{:}\\_Rs{:}}}'.format \
+        table += '  \\texttt{{NR\_M{:}\\_Rpns{:}\\_Rsh{:}}}'.format \
                    ( M[m], Rpns[m], Rs[m][rs] )
 
         table += ' & {:.4f} $\\pm$ {:.4f}'.format \
@@ -176,7 +176,7 @@ for m in range( len( M ) ):
         table += ' & {:.4f} \\\\\n'.format \
                    ( T_ac_NR )
 
-        table += '  \\texttt{{GR\_M{:}\\_Rpns{:}\\_Rs{:}}}'.format \
+        table += '  \\texttt{{GR\_M{:}\\_Rpns{:}\\_Rsh{:}}}'.format \
                    ( M[m], Rpns[m], Rs[m][rs] )
 
         table += ' & {:.4f} $\\pm$ {:.4f}'.format \
@@ -233,7 +233,7 @@ table += \
 table += \
 'a purely acoustic origin of the SASI (\\eqref{eq.Tac}), where we use\n'
 table += \
-'$R_{\\mathrm{ac}}=0.85\\,\\rs$, the midpoint\n'
+'$R_{\\mathrm{ac}}=0.85\\,\\rsh$, the midpoint\n'
 table += \
 'of the shell in which we compute the power (see \\secref{sec.results}).}\n'
 table += '\\end{deluxetable}'

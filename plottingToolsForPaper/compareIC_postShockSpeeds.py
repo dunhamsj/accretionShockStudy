@@ -171,10 +171,11 @@ for m in range( len( M ) ):
 
         handles.append( [ l1, l2, l3 ] )
 
+        lab = ID.replace( 'Rs', 'Rsh' )
         if m == 0:
-            labelLC.append( r'$\texttt{{{:}}}$'.format( ID ) )
+            labelLC.append( r'$\texttt{{{:}}}$'.format( lab ) )
         else:
-            labelHC.append( r'$\texttt{{{:}}}$'.format( ID ) )
+            labelHC.append( r'$\texttt{{{:}}}$'.format( lab ) )
 
     axs[m].grid()
     axs[m].set_xlim( -0.1, 1.1 )
@@ -216,7 +217,7 @@ axs[1].tick_params \
 #plt.show()
 
 #figName = 'fig.SignalSpeedRatios.png'
-figName = '../Figures/fig.SignalSpeedRatios.pdf'
+figName = '/home/kkadoogan/Work/accretionShockPaper/Figures/fig.SignalSpeedRatios.pdf'
 
 plt.savefig( figName, dpi = 300 )
 print( '\n  Saved {:}'.format( figName ) )
