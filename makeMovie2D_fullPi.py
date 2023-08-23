@@ -33,23 +33,23 @@ plotfileDirectory \
 plotfileBaseName = ID + '.plt'
 
 # Field to plot
-field = 'PolytropicConstant'
+field = 'DivV2'
 
 # Scale of colorbar
-zScale = 'None'
+#zScale = 'None'
 #zScale = 'log'
-#zScale = 'symlog'
-linthresh = 1.0e-4#1.0e27
+zScale = 'symlog'
+linthresh = 1.0e-1#1.0e27
 
 # Coordinate system (currently supports 'cartesian' and 'spherical' )
 CoordinateSystem = 'spherical'
 
 # Only use every <plotEvery> plotfile
 plotEvery   = 1
-maxPlotfile = -1
+maxPlotfile = 200
 
 # Colormap
-cmap = 'viridis'
+cmap = 'RdBu'
 
 # First and last snapshots and number of snapshots to include in movie
 SSi = -1 # -1 -> SSi = 0
@@ -57,8 +57,8 @@ SSf = -1 # -1 -> plotfileArray.shape[0] - 1
 nSS = -1 # -1 -> plotfileArray.shape[0]
 
 UseCustomLimits = True
-vmin = 1.5e16
-vmax = 1.9e16
+vmin = -1.0e0
+vmax = -vmin
 
 MovieRunTime = 5.0 # seconds
 
@@ -200,12 +200,13 @@ im = ax.pcolormesh( X1c, X2c, Data0, \
                     norm = Norm, \
                     shading = 'flat' )
 
-time_text = ax.text( 0.3, 0.9, '', c = 'w', transform = ax.transAxes )
+time_text = ax.text( 0.3, 0.9, '', c = 'k', transform = ax.transAxes )
 
 cbar = fig.colorbar( im )
 #cbar.set_label( field + ' ' + r'$\mathrm{{{:}}}$'.format( DataUnits[1:-1] ) )
 #cbar.set_label( r'$v^{\theta}\,\left[\mathrm{s}^{-1}\right]$' )
-cbar.set_label( r'$K\,\left[\mathrm{cgs}\right]$' )
+#cbar.set_label( r'$K\,\left[\mathrm{cgs}\right]$' )
+cbar.set_label( r'$\frac{1}{\sin\theta}\frac{\partial}{\partial\theta}\left(v^{\theta}\,\sin\theta\right)$' )
 
 def InitializeFrame():
 
@@ -244,7 +245,7 @@ if CoordinateSystem == 'spherical':
     ax.set_thetamin( 0.0 )
     ax.set_thetamax( 360.0 )
     ax.set_rmin( 0.0 )
-    ax.set_rmax( 90.0 )
+    ax.set_rmax( 70.0 )
 
     ax.set_theta_zero_location( 'N' ) # z-axis vertical
     ax.set_theta_direction( -1 )
