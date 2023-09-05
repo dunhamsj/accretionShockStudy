@@ -31,7 +31,6 @@ for r in range( R.shape[0] ):
                            .format( plotFileDirectory ) )
                     continue
 
-                #plotFileBaseName = '{:}.plt_'.format( ID )
                 plotFileBaseName = '{:}.plt'.format( ID )
 
                 dataFileName = '.{:}_LegendrePowerSpectrum.dat'.format( ID )
@@ -64,11 +63,9 @@ for r in range( R.shape[0] ):
                 InitialGuess \
                   = np.array( [ LogF, omegaR, omegaI, delta ], np.float64 )
 
-#                beta, perr \
-#                  = FitPowerToModel \
-#                      ( tF0, tF1, t, P1, InitialGuess )
-                beta = np.zeros( 4 )
-                perr = np.zeros( 4 )
+                beta, perr \
+                  = FitPowerToModel \
+                      ( tF0, tF1, t, P1, InitialGuess )
 
                 b = ''
                 e = ''
