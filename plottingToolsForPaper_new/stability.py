@@ -8,6 +8,7 @@ plt.style.use( 'publication.sty' )
 from multiprocessing import Process, cpu_count, Manager
 
 from UtilitiesModule import Overwrite, GetData, GetFileArray
+from computeTimeScales import ComputeTimeScales
 
 yt.funcs.mylog.setLevel(40) # Suppress initial yt output to screen
 
@@ -188,11 +189,19 @@ if __name__ == "__main__":
                'GR1D_M1.4_Rpns040_Rs1.20e2_nX0280', \
                'GR1D_M1.4_Rpns040_Rs1.20e2_nX0560', \
                'GR1D_M1.4_Rpns040_Rs1.20e2_nX1120' ]
+    lab_LC = [ r'$dr=1.00\,\mathrm{km}$', \
+               r'$dr=0.50\,\mathrm{km}$', \
+               r'$dr=0.25\,\mathrm{km}$', \
+               r'$dr=0.12\,\mathrm{km}$' ]
 
     IDs_HC = [ 'GR1D_M2.8_Rpns020_Rs6.00e1_nX0140', \
                'GR1D_M2.8_Rpns020_Rs6.00e1_nX0280', \
                'GR1D_M2.8_Rpns020_Rs6.00e1_nX0560', \
                'GR1D_M2.8_Rpns020_Rs6.00e1_nX1120' ]
+    lab_HC = [ r'$dr=0.50\,\mathrm{km}$', \
+               r'$dr=0.25\,\mathrm{km}$', \
+               r'$dr=0.12\,\mathrm{km}$', \
+               r'$dr=0.06\,\mathrm{km}$' ]
 
     fc = True
     OW = False
@@ -200,6 +209,7 @@ if __name__ == "__main__":
     dataDirectory = '../plottingData_new/'
 
     fig, axs = plt.subplots( 2, 1 )
+    me = 10
 
     for i in range( len( IDs_LC ) ):
 
@@ -217,13 +227,28 @@ if __name__ == "__main__":
         dataFileName = dataDirectory + '{:}_ShockRadiusVsTime.dat'.format( ID )
         MakeDataFile \
           ( plotfileDirectory, plotfileBaseName, dataFileName, \
-            entropyThreshold, markEvery = 1, \
+            entropyThreshold, markEvery = me, \
             forceChoice = fc, \
             OW = OW )
 
         Time, RsAve, RsMin, RsMax = np.loadtxt( dataFileName )
 
-        axs[0].plot( Time, ( RsAve - RsAve[0] ) / RsAve[0] )
+        Rpns_s = ID[14:17]
+        Rsh_s  = ID[20:26]
+
+        Rpns = np.float64( Rpns_s )
+        Rsh  = np.float64( Rsh_s  )
+
+        tauAd, tauAc, T_aa, T_ac \
+          = ComputeTimeScales \
+              ( plotfileDirectory + plotfileBaseName + '00000000/', \
+                Rpns, Rsh, 'GR' )
+
+        ind = np.where( Time / tauAd <= 100.0 )[0]
+
+        axs[0].plot( Time[ind] / tauAd, \
+                     ( RsAve[ind] - RsAve[0] ) / RsAve[0], \
+                     label = lab_LC[i] )
 
     for i in range( len( IDs_HC ) ):
 
@@ -241,13 +266,51 @@ if __name__ == "__main__":
         dataFileName = dataDirectory + '{:}_ShockRadiusVsTime.dat'.format( ID )
         MakeDataFile \
           ( plotfileDirectory, plotfileBaseName, dataFileName, \
-            entropyThreshold, markEvery = 1, \
+            entropyThreshold, markEvery = me, \
             forceChoice = fc, \
             OW = OW )
 
         Time, RsAve, RsMin, RsMax = np.loadtxt( dataFileName )
 
-        axs[1].plot( Time, ( RsAve - RsAve[0] ) / RsAve[0] )
+        Rpns_s = ID[14:17]
+        Rsh_s  = ID[20:26]
+
+        Rpns = np.float64( Rpns_s )
+        Rsh  = np.float64( Rsh_s  )
+
+        tauAd, tauAc, T_aa, T_ac \
+          = ComputeTimeScales \
+              ( plotfileDirectory + plotfileBaseName + '00000000/', \
+                Rpns, Rsh, 'GR' )
+
+        ind = np.where( Time / tauAd <= 100.0 )[0]
+
+        axs[1].plot( Time[ind] / tauAd, \
+                     ( RsAve[ind] - RsAve[0] ) / RsAve[0], \
+                     label = lab_HC[i] )
+
+    axs[0].text( 0.06, 0.87, r'$\texttt{GR1D\_M1.4\_Rpns040\_Rsh1.20e2}$', \
+                 transform = axs[0].transAxes, fontsize = 13 )
+    axs[1].text( 0.06, 0.87, r'$\texttt{GR1D\_M2.8\_Rpns020\_Rsh6.00e1}$', \
+                 transform = axs[1].transAxes, fontsize = 13 )
+    axs[0].grid(axis = 'x')
+    axs[1].grid(axis = 'x')
+
+    axs[0].legend( loc = (0.6,0.49) )
+    axs[1].legend( loc = (0.6,0.53) )
+
+    xlim = axs[0].get_xlim()
+    axs[1].set_xlim( xlim )
+    axs[0].set_xticklabels( [] )
+
+    axs[1].set_xlabel( r'$t/\tau_{\mathrm{ad}}$' )
+
+    ylabel \
+= r'$\left(R_{\mathrm{sh}}\left(t\right)-R_{\mathrm{sh}}\left(0\right)\right)$' \
+    + r'$/R_{\mathrm{sh}}\left(0\right)$'
+    fig.supylabel( ylabel )
+
+    plt.subplots_adjust( hspace = 0.0 )
 
     plt.show()
 
