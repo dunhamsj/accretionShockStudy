@@ -6,20 +6,111 @@ import matplotlib.pyplot as plt
 plt.style.use( 'publication.sty' )
 
 from UtilitiesModule import GetFileArray, GetData
+from globalVariables import dataDirectory
 
-M = argv[1]
+#### ========== User Input ==========
 
-if( M == '1.4' ):
-    IDs = [ '1D_M1.4_Rpns003_Rs1.20e2', \
-            '1D_M1.4_Rpns003_Rs1.50e2', \
-            '1D_M1.4_Rpns003_Rs1.75e2' ]
-else:
-    IDs = [ '1D_M2.8_Rpns003_Rs6.00e1', \
-            '1D_M2.8_Rpns003_Rs7.00e1' ]
+Mpns_s = argv[1]
+Mpns = np.float64( Mpns_s )
 
-nRuns = len( IDs )
+if  ( Mpns == 1.4 ):
+    Rsh = np.array( [    '1.20e2',    '1.50e2',    '1.75e2' ], str )
+    lab = np.array( [ 'Rsh1.20e2', 'Rsh1.50e2', 'Rsh1.75e2' ], str )
+elif( Mpns == 2.8 ):
+    Rsh = np.array( [    '6.00e1',    '7.00e1' ], str )
+    lab = np.array( [ 'Rsh6.00e1', 'Rsh7.00e1' ], str )
 
-plotfileDirectory = '../plottingData_new/'
+IDs = [ '1D_M{:.1f}_Rpns003_Rs{:}'.format( Mpns, r ) for r in Rsh ]
+
+IDs = np.array( IDs, dtype = str )
+Rsh = np.array( np.float64( Rsh ), dtype = np.int64 )
+
+def generateData():
+
+    i = -1
+    for r in range( Rsh.shape[0] ):
+
+        rootDirectory \
+          = '/lump/data/accretionShockStudy/newData/1D/'
+
+        plotFileBaseName_GR = 'GR' + IDs[r] + '.plt'
+        plotFileBaseName_NR = 'NR' + IDs[r] + '.plt'
+
+        plotFileArray_GR \
+          = GetFileArray( rootDirectory, plotFileBaseName_GR )
+        plotFileArray_NR \
+          = GetFileArray( rootDirectory, plotFileBaseName_NR )
+
+        rho_GR, dataUnits, X1, X2, X3, dX1, dX2, dX3, xL, xH, nX, time \
+          = GetData( rootDirectory, plotFileBaseName_GR, 'PF_D', \
+                    'spherical', True, \
+                    ReturnTime = True, ReturnMesh = True, Verbose = True )
+        rho_GR = np.copy( rho_GR[:,0,0] )
+        X1     = np.copy( X1    [:,0,0] )
+        np.savetxt( dataDirectory \
+                      + '{:}_PF_D.dat'.format( plotFileBaseName_GR[:-4] ), \
+                    np.vstack( ( X1, rho_GR ) ) )
+
+        rho_NR, dataUnits \
+          = GetData( rootDirectory, plotFileBaseName_NR, 'PF_D', \
+                    'spherical', True )
+        rho_NR = np.copy( rho_NR[:,0,0] )
+        np.savetxt( dataDirectory \
+                      + '{:}_PF_D.dat'.format( plotFileBaseName_NR[:-4] ), \
+                    np.vstack( ( X1, rho_NR ) ) )
+
+
+        p_GR, dataUnits \
+          = GetData( rootDirectory, plotFileBaseName_GR, 'AF_P', \
+                    'spherical', True )
+        p_GR = np.copy( p_GR[:,0,0] )
+        np.savetxt( dataDirectory \
+                      + '{:}_AF_P.dat'.format( plotFileBaseName_GR[:-4] ), \
+                    np.vstack( ( X1, p_GR ) ) )
+
+        p_NR, dataUnits \
+          = GetData( rootDirectory, plotFileBaseName_NR, 'AF_P', \
+                    'spherical', True )
+        p_NR = np.copy( p_NR[:,0,0] )
+        np.savetxt( dataDirectory \
+                      + '{:}_AF_P.dat'.format( plotFileBaseName_NR[:-4] ), \
+                    np.vstack( ( X1, p_NR ) ) )
+
+        v_GR, dataUnits \
+          = GetData( rootDirectory, plotFileBaseName_GR, 'PF_V1', \
+                    'spherical', True )
+        v_GR = np.copy( v_GR[:,0,0] )
+        np.savetxt( dataDirectory \
+                      + '{:}_PF_V1.dat'.format( plotFileBaseName_GR[:-4] ), \
+                    np.vstack( ( X1, v_GR ) ) )
+
+        v_NR, dataUnits \
+          = GetData( rootDirectory, plotFileBaseName_NR, 'PF_V1', \
+                    'spherical', True )
+        v_NR = np.copy( v_NR[:,0,0] )
+        np.savetxt( dataDirectory \
+                      + '{:}_PF_V1.dat'.format( plotFileBaseName_NR[:-4] ), \
+                    np.vstack( ( X1, v_NR ) ) )
+
+        alpha, dataUnits \
+          = GetData( rootDirectory, plotFileBaseName_GR, 'GF_Alpha', \
+                    'spherical', True )
+        alpha = np.copy( alpha[:,0,0] )
+        np.savetxt( dataDirectory \
+                      + '{:}_GF_Alpha.dat'.format( plotFileBaseName_GR[:-4] ), \
+                    np.vstack( ( X1, alpha ) ) )
+
+        Phi, dataUnits \
+          = GetData( rootDirectory, plotFileBaseName_NR, 'GF_Phi_N', \
+                    'spherical', True )
+        Phi = np.copy( Phi[:,0,0] )
+        np.savetxt( dataDirectory \
+                      + '{:}_GF_Phi_N.dat'.format( plotFileBaseName_NR[:-4] ), \
+                    np.vstack( ( X1, Phi ) ) )
+
+    return
+
+generateData()
 
 nRows = 2
 nCols = 2
@@ -29,83 +120,115 @@ ax01ylabel = r'$v/v_{1}$'
 ax10ylabel = r'$p/\left(\rho_{1}\,v_{1}^{2}\right)$'
 ax11ylabel = r'$\alpha/\alpha_{1}$'
 
+saveFigAs = '/home/kkadoogan/Work/accretionShockPaper/Figures/fig.CompareNRvsGR_SS_M{:.1f}.pdf'.format( Mpns )
+
 verbose = False
+
+G_MKS = 6.673e-11
+c_m   = 2.99792458e8
+c_cm  = 2.99792458e10
 
 ### Plotting
 
 fig, axs = plt.subplots( nRows, nCols )
+
+rootDirectory_NR = dataDirectory
+rootDirectory_GR = dataDirectory
+
+plotFileDirectory_GR = rootDirectory_GR
+plotFileDirectory_NR = rootDirectory_NR
 
 # colorblind-friendly palette: https://gist.github.com/thriveth/8560036
 color = ['#377eb8', '#ff7f00', '#4daf4a', \
          '#f781bf', '#a65628', '#984ea3', \
          '#999999', '#e41a1c', '#dede00']
 
-def plot( plotfile, Rsh, Rpns, rel, verbose ):
+i = -1
+for r in range( Rsh.shape[0] ):
 
-    time, rho, dataUnits, X1, X2, X3, dX1, dX2, dX3, nX \
-      = GetData( plotfile, 'PF_D'    , verbose = verbose )
-    time, p  , dataUnits, X1, X2, X3, dX1, dX2, dX3, nX \
-      = GetData( plotfile, 'AF_P'    , verbose = verbose )
-    time, v  , dataUnits, X1, X2, X3, dX1, dX2, dX3, nX \
-      = GetData( plotfile, 'PF_V1'   , verbose = verbose )
+    plotFileBaseName_GR = 'GR' + IDs[r] + '.plt'
+    plotFileBaseName_NR = 'NR' + IDs[r] + '.plt'
+
+    plotFileArray_GR \
+      = GetFileArray( plotFileDirectory_GR, plotFileBaseName_GR )
+    plotFileArray_NR \
+      = GetFileArray( plotFileDirectory_NR, plotFileBaseName_NR )
+
+    plotFile_GR = plotFileDirectory_GR + plotFileArray_GR[-1]
+    plotFile_NR = plotFileDirectory_NR + plotFileArray_NR[-1]
+
+    time, rho_GR, dataUnits, X1, X2, X3, dX1, dX2, dX3, nX \
+      = GetData( plotFile_GR, 'PF_D' , verbose = verbose )
+    time, rho_NR, dataUnits, X1, X2, X3, dX1, dX2, dX3, nX \
+      = GetData( plotFile_NR, 'PF_D' , verbose = verbose )
+    time, p_GR  , dataUnits, X1, X2, X3, dX1, dX2, dX3, nX \
+      = GetData( plotFile_GR, 'AF_P' , verbose = verbose )
+    time, p_NR  , dataUnits, X1, X2, X3, dX1, dX2, dX3, nX \
+      = GetData( plotFile_NR, 'AF_P' , verbose = verbose )
+    time, v_GR  , dataUnits, X1, X2, X3, dX1, dX2, dX3, nX \
+      = GetData( plotFile_GR, 'PF_V1', verbose = verbose )
+    time, v_NR  , dataUnits, X1, X2, X3, dX1, dX2, dX3, nX \
+      = GetData( plotFile_NR, 'PF_V1', verbose = verbose )
     time, alpha , dataUnits, X1, X2, X3, dX1, dX2, dX3, nX \
-      = GetData( plotfile, 'GF_Alpha', verbose = verbose )
+      = GetData( plotFile_GR, 'GF_Alpha', verbose = verbose )
+    time, Phi   , dataUnits, X1, X2, X3, dX1, dX2, dX3, nX \
+      = GetData( plotFile_NR, 'GF_Phi_N', verbose = verbose )
 
-    eta = np.copy( X1 )
+    etaGR = np.copy( X1 )
+    etaNR = np.copy( X1 )
 
-    ind   = np.where( eta < 0.99 * Rsh )[0]
-    ind_1 = np.where( eta > 1.00 * Rsh )[0][0]
+    indGR   = np.where( etaGR < 0.99 * Rsh[r] )[0]
+    indGR_1 = np.where( etaGR > 1.00 * Rsh[r] )[0][0]
 
-    if( rel == 'NR' ):
-        print( 'Rsh: {:}, Omega: {:}' \
-               .format( Rsh, 1.0e-3 \
-                               * np.abs( v[ind[-1],0,0] ) / ( Rsh - Rpns ) ) )
+    indNR   = np.where( etaNR < 0.99 * Rsh[r] )[0]
+    indNR_1 = np.where( etaNR > 1.00 * Rsh[r] )[0][0]
 
-    p = np.copy( p[ind,0,0] \
-                   / ( rho[ind_1,0,0] * ( v[ind_1,0,0] * 1.0e5 )**2 ) )
+    v = np.copy( v_GR[indGR,0,0] )
+    if   Mpns_s == '1.4':
+        Rpns = 4.0e1
+    elif Mpns_s == '2.8':
+        Rpns = 2.0e1
+    print( 'Rs: {:}, Omega: {:}'.format \
+           ( Rsh[r], 1.0e-3 * np.abs( v[-1] ) / ( Rsh[r] - Rpns ) ) )
 
-    rho = np.copy( rho[ind,0,0] / rho[ind_1,0,0] )
+    p_GR \
+      = np.copy \
+          ( p_GR[indGR  ,0,0] \
+              / ( rho_GR[indGR_1,0,0] * ( v_GR[indGR_1,0,0] * 1.0e5 )**2 ) )
 
-    v = np.copy( v[ind,0,0] / v[ind_1,0,0] )
+    p_NR \
+      = np.copy \
+          ( p_NR[indNR  ,0,0] \
+              / ( rho_NR[indNR_1,0,0] * ( v_NR[indNR_1,0,0] * 1.0e5 )**2 ) )
 
-    if( rel == 'NR' ):
-        time, Phi  , dataUnits, X1, X2, X3, dX1, dX2, dX3, nX \
-          = GetData( plotfile, 'GF_Phi_N', verbose = verbose )
-        alpha = 1.0 + Phi
+    rho_GR = np.copy( rho_GR[indGR,0,0] / rho_GR[indGR_1,0,0] )
+    rho_NR = np.copy( rho_NR[indNR,0,0] / rho_NR[indNR_1,0,0] )
 
-    alpha = np.copy( alpha[ind,0,0] / alpha[ind_1,0,0] )
+    v_GR = np.copy( v_GR[indGR,0,0] / v_GR[indGR_1,0,0] )
+    v_NR = np.copy( v_NR[indNR,0,0] / v_NR[indNR_1,0,0] )
 
-    eta = np.copy( eta[ind] )
+    alpha_N = 1.0 + Phi
+    alpha_GR = np.copy( alpha  [indGR,0,0] / alpha  [indGR_1,0,0] )
+    alpha_NR = np.copy( alpha_N[indNR,0,0] / alpha_N[indNR_1,0,0] )
 
-    return eta, rho, v, p, alpha
+    etaGR = np.copy( etaGR[indGR] )
+    etaNR = np.copy( etaNR[indNR] )
 
-for i in range( nRuns ):
+    i += 1
 
-    Mpns_s = IDs[i][4 :7 ]
-    Rpns_s = IDs[i][12:15]
-    Rsh_s  = IDs[i][18:  ]
+    axs[0,0].plot( etaGR, rho_GR, color = color[i], ls = '-' )
+    axs[0,0].plot( etaNR, rho_NR, color = color[i], ls = '--' )
 
-    Mpns = np.float64( Mpns_s )
-    Rpns = np.int64  ( Rpns_s )
-    Rsh  = np.float64( Rsh_s  )
+    axs[0,1].plot( etaGR, v_GR, color = color[i], ls = '-' )
+    axs[0,1].plot( etaNR, v_NR, color = color[i], ls = '--' )
 
-    rel = 'GR'
-    plotfile = plotfileDirectory + rel + IDs[i] + '.plt00000000'
-    eta, rho, v, p, alpha = plot( plotfile, Rsh, Rpns, rel, verbose )
-    lab = r'$\texttt{{{:}_Rsh{:}}}$'.format( rel, Rsh_s )
-    axs[0,0].plot( eta, rho  , color = color[i], ls = '-' )
-    axs[0,1].plot( eta, v    , color = color[i], ls = '-' )
-    axs[1,0].plot( eta, p    , color = color[i], ls = '-' )
-    axs[1,1].plot( eta, alpha, color = color[i], ls = '-', label = lab )
+    axs[1,0].plot( etaGR, p_GR  , color = color[i], ls = '-' )
+    axs[1,0].plot( etaNR, p_NR  , color = color[i], ls = '--' )
 
-    rel = 'NR'
-    plotfile = plotfileDirectory + rel + IDs[i] + '.plt00000000'
-    eta, rho, v, p, alpha = plot( plotfile, Rsh, Rpns, rel, verbose )
-    lab = r'$\texttt{{{:}_Rsh{:}}}$'.format( rel, Rsh_s )
-    axs[0,0].plot( eta, rho  , color = color[i], ls = '--' )
-    axs[0,1].plot( eta, v    , color = color[i], ls = '--' )
-    axs[1,0].plot( eta, p    , color = color[i], ls = '--' )
-    axs[1,1].plot( eta, alpha, color = color[i], ls = '--', label = lab )
+    axs[1,1].plot( etaGR, alpha_GR, color = color[i], ls = '-', \
+             label = r'$\texttt{{GR_{:}}}$'.format( lab[r] ) )
+    axs[1,1].plot( etaNR, alpha_NR, color = color[i], ls = '--', \
+             label = r'$\texttt{{NR_{:}}}$'.format( lab[r] ) )
 
 xlabel = r'$r \left[\mathrm{km}\right]$'
 
@@ -174,7 +297,7 @@ fig.supxlabel( xlabel, y = 0.02, fontsize = 15 )
 axs[0,0].set_yscale( 'log' )
 axs[1,0].set_yscale( 'log' )
 
-axs[1,1].text( 0.625, 0.775, r'$\texttt{{M{:}}}$'.format( M ), \
+axs[1,1].text( 0.625, 0.775, r'$\texttt{{M{:.1f}}}$'.format( Mpns ), \
                transform = axs[1,1].transAxes, fontsize = 14 )
 
 axs[1,1].legend( loc = (0.43,0.10), prop = { 'size' : 10 } )
@@ -184,8 +307,6 @@ y11ticks = np.array( [ 0.90, 0.95, 1.00 ], np.float64 )
 plt.subplots_adjust( wspace = 0.0, hspace = 0.0 )
 
 #plt.savefig( saveFigAs, dpi = 300 )
-#print( '\n  Saved {:}'.format( saveFigAs ) )
-
 plt.show()
 
 plt.close()

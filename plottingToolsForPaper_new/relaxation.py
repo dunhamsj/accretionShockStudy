@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 
 import numpy as np
-from sys import argv
 import matplotlib.pyplot as plt
 plt.style.use( 'publication.sty' )
+import os
 from multiprocessing import Process, cpu_count, Manager
 
 from UtilitiesModule import Overwrite, GetFileArray, GetData
+from globalVariables import dataDirectory
 
-def getData( plotfileDirectory, ID, field, nX, forceChoice, OW ):
+def generateData( plotfileDirectory, ID, forceChoice, OW ):
 
-    dataFileName = '../plottingData_new/{:}_Relaxation_{:}.dat'.format( ID, field )
+    dataFileName = dataDirectory + 'Relaxation_PF_D_{:}.dat'.format( ID )
 
     OW = Overwrite( dataFileName, ForceChoice = forceChoice, OW = OW )
 
@@ -29,6 +30,8 @@ def getData( plotfileDirectory, ID, field, nX, forceChoice, OW ):
         print( '  Generating derivative data' )
         print( '  --------------------------' )
 
+        nX = np.int64( ID[-4:] )
+
         Data     = np.zeros( (nSS,nX), np.float64 )
         Gradient = np.zeros( (nSS-1) , np.float64 )
         Time     = np.zeros( (nSS)   , np.float64 )
@@ -44,9 +47,11 @@ def getData( plotfileDirectory, ID, field, nX, forceChoice, OW ):
                 if j % 10 == 0:
                     print( '    File {:d}/{:d}'.format( j+1, N ) )
 
-                plotfile = plotfileDirectory + plotfileArray[i]
-                time[j], data, dataUnits, X1, X2, X3, dX1, dX2, dX3, nX \
-                  = GetData( plotfile, field, verbose = False )
+                data, dataUnits, time[j] \
+                  = GetData( plotfileDirectory, plotfileBaseName, 'PF_D', \
+                             'spherical', True, argv = ['a',plotfileArray[i]], \
+                             ReturnTime = True, ReturnMesh = False, \
+                             Verbose = False )
 
                 nodalData[j] = np.copy( data[:,0,0] )
 
@@ -111,12 +116,10 @@ def getData( plotfileDirectory, ID, field, nX, forceChoice, OW ):
 
             Gradient[i-1] = ( Num / Den ).max()
 
-        header = 'Generated from relaxation.py\n'
-        header += 'Time [ms], |drho|/rho'
-        np.savetxt( dataFileName, np.vstack( (Time[:-1],Gradient) ), \
-                    header = header )
+        np.savetxt( dataFileName, np.vstack( (Time[:-1],Gradient) ) )
 
-        del plotfileBaseName, plotfileArray, Data, Gradient, Time
+        del plotfileBaseName, plotfileArray, \
+            Data, Gradient, Time
 
     # END if OW
 
@@ -124,90 +127,65 @@ def getData( plotfileDirectory, ID, field, nX, forceChoice, OW ):
 
     return Time, Data
 
-def plot( ID_LC, ID_HC, Time_LC, Time_HC, Data_LC, Data_HC ):
+def addPlot( rootDirectory, ID, Rsh, Rpns, text, xlim, ylim, ax ):
 
-    # Early-stage
+    dataFileName \
+      = dataDirectory + 'Relaxation_PF_D_{:}.dat'.format( ID )
 
-    tauAd = Time_LC[-1] / 1.0e2
+    Time, Data = np.loadtxt( dataFileName )
+    tauAd = Time[-1] / 1.0e2
 
-    ind = np.where( Time_LC[:-1] / tauAd < 100 )[0]
-    axs[0].plot( Time_LC[ind] / tauAd, np.abs( Data_LC[ind] ), 'k.', \
-                 markersize = 2.0, markevery = 1 )
+    ind = np.where( Time[:-1] / tauAd < 100 )[0]
+    ax.plot( Time[ind] / tauAd, np.abs( Data[ind] ), 'k.', \
+             markersize = 2.0, markevery = 1 )
 
-    # Early-stage
+    ax.text( 0.3, 0.87, text, \
+             transform = ax.transAxes, fontsize = 15 )
 
-    tauAd = Time_HC[-1] / 1.0e2
+    ax.set_xlim( xlim )
+    ax.set_ylim( ylim )
 
-    ind = np.where( Time_HC[:-1] / tauAd < 100 )[0]
-    axs[1].plot( Time_HC[ind] / tauAd, np.abs( Data_HC[ind] ), 'k.', \
-                 markersize = 2.0, markevery = 1 )
+    ax.set_yscale( 'log' )
 
-if __name__ == '__main__':
+    ax.grid( axis = 'x' )
 
-    UseLogScale = True
+    return
 
-    nX = [ '0280' ]
+if __name__ == "__main__":
 
-    rootID_LC = 'GR1D_M1.4_Rpns040_Rs1.20e2'
-    rootID_HC = 'GR1D_M2.8_Rpns020_Rs6.00e1'
-
-    rootDirectory_LC \
-      = '/lump/data/accretionShockStudy/newData/resolutionStudy_lowCompactness/'
-    rootDirectory_HC \
-      = '/lump/data/accretionShockStudy/newData/resolutionStudy_highCompactness/'
-
-    fc = True
-    OW = False
-    for i in range( len( nX ) ):
-
-        ID_LC = rootID_LC + '_nX{:}'.format( nX[i] )
-        ID_HC = rootID_HC + '_nX{:}'.format( nX[i] )
-
-        plotfileDirectory_LC = '{:}{:}/'.format( rootDirectory_LC, ID_LC )
-        plotfileDirectory_HC = '{:}{:}/'.format( rootDirectory_HC, ID_HC )
-
-        D = 'PF_D'
-
-        Time_LC, Data_LC \
-          = getData( plotfileDirectory_LC, ID_LC, D, np.int64( nX[i] ), \
-                     forceChoice = fc, OW = OW )
-        Time_HC, Data_HC \
-          = getData( plotfileDirectory_HC, ID_HC, D, np.int64( nX[i] ), \
-                     forceChoice = fc, OW = OW )
+    saveFigAs \
+      = '/home/kkadoogan/Work/accretionShockPaper/Figures/fig.Relaxation.pdf'
+    saveFigAs \
+      = 'fig.Relaxation.pdf'
 
     fig, axs = plt.subplots( 2, 1 )
 
     xlim = [ -5.0, +105 ]
 
-    textLC = r'$\texttt{GR1D\_M1.4\_Rpns040\_Rsh1.20e2}$'
-    textHC = r'$\texttt{GR1D\_M2.8\_Rpns020\_Rsh6.00e1}$'
+    rootDirectory \
+      = '/lump/data/accretionShockStudy/newData/'
 
-    dataDirectory = '../plottingData_new/'
+    fc = True
+    ow = False
 
-    for i in range( len( nX ) ):
+    # Early-stage
 
-        ID_LC = rootID_LC + '_nX{:}'.format( nX[i] )
-        ID_HC = rootID_HC + '_nX{:}'.format( nX[i] )
-
-        Time_LC, Data_LC \
-          = np.loadtxt( dataDirectory + ID_LC + '_Relaxation_PF_D.dat' )
-        Time_HC, Data_HC \
-          = np.loadtxt( dataDirectory + ID_HC + '_Relaxation_PF_D.dat' )
-
-        plot( ID_LC, ID_HC, Time_LC, Time_HC, Data_LC, Data_HC )
-
-    axs[0].set_xlim( xlim )
-    axs[0].set_yscale( 'log' )
-    axs[1].set_xlim( xlim )
-    axs[1].set_yscale( 'log' )
-
+    rootDirectory_lowXi \
+      = rootDirectory + 'resolutionStudy_lowCompactness/'
+    ID   = 'GR1D_M1.4_Rpns040_Rs1.20e2_nX0280'
+    Rsh  = 1.20e2
+    Rpns = 4.00e1
     text = r'$\texttt{GR1D\_M1.4\_Rpns040\_Rsh1.20e2}$'
-    axs[0].text( 0.3, 0.87, text, \
-                 transform = axs[0].transAxes, fontsize = 15 )
+    ylim = 1.0e-6
 
-    text = r'$\texttt{GR1D\_M2.8\_Rpns020\_Rsh6.00e1}$'
-    axs[1].text( 0.3, 0.87, text, \
-                 transform = axs[1].transAxes, fontsize = 15 )
+    plotfileDirectory \
+      = rootDirectory + 'resolutionStudy_lowCompactness/{:}/'.format( ID )
+
+    Time, Data \
+      = generateData( plotfileDirectory, ID, \
+                      forceChoice = fc, OW = ow )
+
+    addPlot( rootDirectory_lowXi, ID, Rsh, Rpns, text, xlim, ylim, axs[0] )
 
     axs[0].tick_params \
       ( which = 'both', \
@@ -217,6 +195,25 @@ if __name__ == '__main__':
         labelright  = False, \
         labelbottom = False )
 
+    # High-compactness
+
+    rootDirectory_highXi \
+      = rootDirectory + 'resolutionStudy_highCompactness/'
+    ID   = 'GR1D_M2.8_Rpns020_Rs6.00e1_nX0280'
+    Rsh  = 6.00e1
+    Rpns = 2.00e1
+    text = r'$\texttt{GR1D\_M2.8\_Rpns020\_Rsh6.00e1}$'
+    ylim = 1.0e-13
+
+    plotfileDirectory \
+      = rootDirectory + 'resolutionStudy_highCompactness/{:}/'.format( ID )
+
+    Time, Data \
+      = generateData( plotfileDirectory, ID, \
+                      forceChoice = fc, OW = ow )
+
+    addPlot( rootDirectory_highXi, ID, Rsh, Rpns, text, xlim, ylim, axs[1] )
+
     axs[1].tick_params \
       ( which = 'both', \
         top = True, left = True, bottom = True, right = True, \
@@ -225,25 +222,23 @@ if __name__ == '__main__':
         labelright  = False, \
         labelbottom = True )
 
-    axs[0].grid( axis = 'x' )
-    axs[1].grid( axis = 'x' )
-    axs[0].set_ylim( 1.0e-6 , 6.0e-1 )
-    axs[1].set_ylim( 1.0e-13, 6.0e-1 )
-
     axs[1].set_xlabel( r'$t/\tau_{\mathrm{ad}}$', fontsize = 15 )
 
     ylabel \
-    = r'$\max\limits_{r\in\left[R_{\mathrm{PNS}},1.5\,R_{\mathrm{sh}}\right]}\left|\dot{\rho}\left(t\right)/\rho\left(t\right)\right|$' \
+    = r'$\max\limits_{r\in\left[R_{\mathrm{PNS}},1.5\,R_{\mathrm{sh}}\right]}$' \
+        + r'$\left|\dot{\rho}\left(t\right)/\rho\left(t\right)\right|$' \
                + r'$\ \left[\mathrm{ms}^{-1}\right]$'
+
     fig.supylabel( ylabel, x = -0.01, fontsize = 15 )
 
     plt.subplots_adjust( hspace = 0 )
 
     plt.show()
 
-#    figName = '/home/kkadoogan/Work/accretionShockPaper/Figures/fig.Relaxation.pdf'
-#    plt.savefig( figName, dpi = 300 )
-#    print( '\n  Saved {:}'.format( figName ) )
+    #plt.savefig( saveFigAs, dpi = 300 )
+    #print( '\n  Saved {:}'.format( saveFigAs ) )
+
+    plt.close()
 
     import os
     os.system( 'rm -rf __pycache__ ' )

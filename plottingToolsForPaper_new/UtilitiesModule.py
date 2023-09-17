@@ -186,7 +186,9 @@ def GetData( DataDirectory, PlotFileBaseName, Field, \
 
     FileArray = GetFileArray( DataDirectory, PlotFileBaseName, \
                               SSi = SSi, SSf = SSf, nSS = nSS )
-    FileArray = np.copy( FileArray[:-1] )
+
+    if( FileArray.shape[0] != 1 ):
+        FileArray = np.copy( FileArray[:-1] )
 
     File = ChoosePlotFile( FileArray, PlotFileBaseName, argv = argv, \
                            Verbose = Verbose )
