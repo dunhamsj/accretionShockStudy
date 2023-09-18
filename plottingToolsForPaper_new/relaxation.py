@@ -7,7 +7,7 @@ import os
 from multiprocessing import Process, cpu_count, Manager
 
 from UtilitiesModule import Overwrite, GetFileArray, GetData
-from globalVariables import dataDirectory
+from globalVariables import *
 
 def generateData( plotfileDirectory, ID, forceChoice, OW ):
 
@@ -116,7 +116,11 @@ def generateData( plotfileDirectory, ID, forceChoice, OW ):
 
             Gradient[i-1] = ( Num / Den ).max()
 
-        np.savetxt( dataFileName, np.vstack( (Time[:-1],Gradient) ) )
+        header \
+          = 'Generated from relaxation.py\nTime [ms]\n1/rho x drho/dt [1/ms]'
+
+        np.savetxt( dataFileName, np.vstack( (Time[:-1],Gradient) ), \
+                    header = header )
 
         del plotfileBaseName, plotfileArray, \
             Data, Gradient, Time
@@ -153,17 +157,9 @@ def addPlot( rootDirectory, ID, Rsh, Rpns, text, xlim, ylim, ax ):
 
 if __name__ == "__main__":
 
-    saveFigAs \
-      = '/home/kkadoogan/Work/accretionShockPaper/Figures/fig.Relaxation.pdf'
-    saveFigAs \
-      = 'fig.Relaxation.pdf'
-
     fig, axs = plt.subplots( 2, 1 )
 
     xlim = [ -5.0, +105 ]
-
-    rootDirectory \
-      = '/lump/data/accretionShockStudy/newData/'
 
     fc = True
     ow = False
@@ -171,15 +167,14 @@ if __name__ == "__main__":
     # Early-stage
 
     rootDirectory_lowXi \
-      = rootDirectory + 'resolutionStudy_lowCompactness/'
+      = plotfileRootDirectory + 'resolutionStudy_lowCompactness/'
     ID   = 'GR1D_M1.4_Rpns040_Rs1.20e2_nX0280'
     Rsh  = 1.20e2
     Rpns = 4.00e1
     text = r'$\texttt{GR1D\_M1.4\_Rpns040\_Rsh1.20e2}$'
     ylim = 1.0e-6
 
-    plotfileDirectory \
-      = rootDirectory + 'resolutionStudy_lowCompactness/{:}/'.format( ID )
+    plotfileDirectory = rootDirectory_lowXi + '{:}/'.format( ID )
 
     Time, Data \
       = generateData( plotfileDirectory, ID, \
@@ -198,15 +193,14 @@ if __name__ == "__main__":
     # High-compactness
 
     rootDirectory_highXi \
-      = rootDirectory + 'resolutionStudy_highCompactness/'
+      = plotfileRootDirectory + 'resolutionStudy_highCompactness/'
     ID   = 'GR1D_M2.8_Rpns020_Rs6.00e1_nX0280'
     Rsh  = 6.00e1
     Rpns = 2.00e1
     text = r'$\texttt{GR1D\_M2.8\_Rpns020\_Rsh6.00e1}$'
     ylim = 1.0e-13
 
-    plotfileDirectory \
-      = rootDirectory + 'resolutionStudy_highCompactness/{:}/'.format( ID )
+    plotfileDirectory = rootDirectory_highXi + '{:}/'.format( ID )
 
     Time, Data \
       = generateData( plotfileDirectory, ID, \
@@ -235,8 +229,9 @@ if __name__ == "__main__":
 
     plt.show()
 
-    #plt.savefig( saveFigAs, dpi = 300 )
-    #print( '\n  Saved {:}'.format( saveFigAs ) )
+    #figName = figuresDirectory + 'fig.Relaxation.pdf'
+    #plt.savefig( figName, dpi = 300 )
+    #print( '\n  Saved {:}'.format( figName ) )
 
     plt.close()
 
