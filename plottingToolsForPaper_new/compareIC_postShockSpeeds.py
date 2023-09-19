@@ -24,7 +24,7 @@ c = 2.99792458e5
 
 plotfileDirectory = plotfileRootDirectory + '1D/'
 
-generateData = False
+generateData = True
 plotData     = True
 
 if generateData:
@@ -142,7 +142,7 @@ if generateData:
         header = '{:} X1_C, lambda0_NR, lambda0_GR, lambda1_NR, lambda1_GR, ' \
                  .format( ID ) + 'lambda2_NR, lambda2_GR'
 
-        fileName = dataDirectory + '{:}_signalSpeeds.dat'.format( ID )
+        fileName = dataDirectory + 'signalSpeeds_{:}.dat'.format( ID )
 
         np.savetxt( fileName, signalSpeeds, header = header )
 
@@ -167,7 +167,7 @@ if plotData:
 
         ID = IDs[i]
 
-        fileName = dataDirectory + '{:}_signalSpeeds.dat'.format( ID )
+        fileName = dataDirectory + 'signalSpeeds_{:}.dat'.format( ID )
 
         X1, lambda0_NR, lambda0_GR, lambda1_NR, lambda1_GR, \
         lambda2_NR, lambda2_GR \

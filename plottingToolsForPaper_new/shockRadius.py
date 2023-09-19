@@ -129,17 +129,33 @@ def MakeDataFile \
 
 if __name__ == "__main__":
 
-    IDs = [ 'GR1D_M1.4_Rpns040_Rs1.20e2_nX0140', \
-            'GR1D_M1.4_Rpns040_Rs1.20e2_nX0280', \
-            'GR1D_M1.4_Rpns040_Rs1.20e2_nX0560', \
-            'GR1D_M1.4_Rpns040_Rs1.20e2_nX1120', \
-            'GR1D_M2.8_Rpns020_Rs6.00e1_nX0140', \
-            'GR1D_M2.8_Rpns020_Rs6.00e1_nX0280', \
-            'GR1D_M2.8_Rpns020_Rs6.00e1_nX0560', \
-            'GR1D_M2.8_Rpns020_Rs6.00e1_nX1120' ]
-
+    do1D         = False
     generateData = False
     plotData     = True
+
+    if do1D:
+
+        IDs = [ 'GR1D_M1.4_Rpns040_Rs1.20e2_nX0140', \
+                'GR1D_M1.4_Rpns040_Rs1.20e2_nX0280', \
+                'GR1D_M1.4_Rpns040_Rs1.20e2_nX0560', \
+                'GR1D_M1.4_Rpns040_Rs1.20e2_nX1120', \
+                'GR1D_M2.8_Rpns020_Rs6.00e1_nX0140', \
+                'GR1D_M2.8_Rpns020_Rs6.00e1_nX0280', \
+                'GR1D_M2.8_Rpns020_Rs6.00e1_nX0560', \
+                'GR1D_M2.8_Rpns020_Rs6.00e1_nX1120' ]
+
+    else:
+
+        IDs = [ 'NR2D_M1.4_Rpns040_Rs1.20e2', \
+                'NR2D_M1.4_Rpns040_Rs1.50e2', \
+                'NR2D_M1.4_Rpns040_Rs1.75e2', \
+                'GR2D_M1.4_Rpns040_Rs1.20e2', \
+                'GR2D_M1.4_Rpns040_Rs1.50e2', \
+                'GR2D_M1.4_Rpns040_Rs1.75e2', \
+                'NR2D_M2.8_Rpns020_Rs6.00e1', \
+                'NR2D_M2.8_Rpns020_Rs7.00e1', \
+                'GR2D_M2.8_Rpns020_Rs6.00e1', \
+                'GR2D_M2.8_Rpns020_Rs7.00e1' ]
 
     if( generateData ):
 
@@ -150,14 +166,21 @@ if __name__ == "__main__":
 
             ID = IDs[i]
 
-            if i < 4:
-                plotfileDirectory \
-                  = plotfileRootDirectory \
-                      + 'resolutionStudy_lowCompactness/' + ID + '/'
+            if do1D:
+
+                if i < 4:
+                    plotfileDirectory \
+                      = plotfileRootDirectory \
+                          + 'resolutionStudy_lowCompactness/' + ID + '/'
+                else:
+                    plotfileDirectory \
+                      = plotfileRootDirectory \
+                          + 'resolutionStudy_highCompactness/' + ID + '/'
+
             else:
+
                 plotfileDirectory \
-                  = plotfileRootDirectory \
-                      + 'resolutionStudy_highCompactness/' + ID + '/'
+                  = plotfileRootDirectory + '2D/{:}/'.format( ID )
 
             plotfileBaseName = ID + '.plt'
             entropyThreshold = 1.0e15
@@ -185,22 +208,35 @@ if __name__ == "__main__":
 
             rpns = np.int64  ( ID[14:17] )
             rsh  = np.float64( ID[20:26] )
-            nX   = np.int64  ( ID[-4:] )
+            if do1D:
+                nX = np.int64( ID[-4:] )
+            else:
+                nX = -1
 
             dataFileName = dataDirectory \
                              + 'ShockRadiusVsTime_{:}.dat'.format( ID )
 
             t, RsAve, RsMin, RsMax = np.loadtxt( dataFileName )
-            tauAd = t[-1] / 1.0e2
+            if do1D:
+                tauAd = t[-1] / 1.0e2
+            else:
+                tauAd = 1.0
 
             dr = ( 1.5 * rsh - rpns ) / np.float64( nX )
 
-            lab = r'$dr={:.2f}\ \mathrm{{km}}$'.format( dr )
-
-            if i < 4:
-                m = 0
+            if do1D:
+                lab = r'$dr={:.2f}\ \mathrm{{km}}$'.format( dr )
+                if i < 4:
+                    m = 0
+                else:
+                    m = 1
             else:
-                m = 1
+                lab = ID
+                if i < 6:
+                    m = 0
+                else:
+                    m = 1
+
 
             axs[m].plot( t / tauAd, ( RsAve - RsAve[0] ) / RsAve[0], \
                          label = lab )
@@ -213,13 +249,18 @@ if __name__ == "__main__":
         axs[1].text( 0.06, 0.87, text, \
                      transform = axs[1].transAxes, fontsize = 13 )
 
+        if do1D:
+            lb = False
+        else:
+            lb = True
+
         axs[0].tick_params \
           ( which = 'both', \
             top = True, left = True, bottom = True, right = True, \
             labeltop    = False, \
             labelleft   = True, \
             labelright  = False, \
-            labelbottom = False )
+            labelbottom = lb )
 
         axs[1].tick_params \
           ( which = 'both', \
@@ -229,11 +270,15 @@ if __name__ == "__main__":
             labelright  = False, \
             labelbottom = True )
 
-        xlim = [ -5, 105 ]
-        axs[0].set_xlim( xlim )
-        axs[1].set_xlim( xlim )
+        if do1D:
+            xlim = [ -5, 105 ]
+            axs[0].set_xlim( xlim )
+            axs[1].set_xlim( xlim )
 
-        axs[1].set_xlabel( r'$t/\tau_{\mathrm{ad}}$' )
+        if do1D:
+            axs[1].set_xlabel( r'$t/\tau_{\mathrm{ad}}$' )
+        else:
+            axs[1].set_xlabel( r'$t/\mathrm{ms}$' )
 
         axs[0].grid( axis = 'x' )
         axs[1].grid( axis = 'x' )
@@ -246,7 +291,7 @@ if __name__ == "__main__":
               + r'$/R_{\mathrm{sh}}\left(0\right)$'
         fig.supylabel( ylabel )
 
-        plt.subplots_adjust( hspace = 0 )
+        if do1D: plt.subplots_adjust( hspace = 0 )
 
         plt.show()
 
