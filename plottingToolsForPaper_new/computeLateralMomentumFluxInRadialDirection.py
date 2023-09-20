@@ -14,8 +14,8 @@ from globalVariables import *
 rootDirectory = plotfileRootDirectory + '2D/'
 
 M    = '1.4'
-Rpns = '040'
-Rs   = '1.20e2'
+Rpns = '070'
+Rs   = '1.50e2'
 
 ID = '2D_M{:}_Rpns{:}_Rs{:}'.format( M, Rpns, Rs )
 

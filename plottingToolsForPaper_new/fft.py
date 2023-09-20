@@ -13,16 +13,31 @@ with open( dataDirectory + 'fft.dat', 'w' ) as f:
     f.write( '# Generated from fft.py\n' )
     f.write( '# Model T/ms fwhm/ms\n' )
 
-IDs = [ 'NR2D_M1.4_Rpns040_Rs1.20e2' ]
+IDs = [ 'NR2D_M1.4_Rpns040_Rs1.20e2', \
+        'GR2D_M1.4_Rpns040_Rs1.20e2', \
+        'NR2D_M1.4_Rpns040_Rs1.50e2', \
+        'GR2D_M1.4_Rpns040_Rs1.50e2', \
+        'NR2D_M1.4_Rpns040_Rs1.75e2', \
+        'GR2D_M1.4_Rpns040_Rs1.75e2', \
+        'NR2D_M2.8_Rpns020_Rs6.00e1', \
+        'GR2D_M2.8_Rpns020_Rs6.00e1', \
+        'NR2D_M2.8_Rpns020_Rs7.00e1', \
+        'GR2D_M2.8_Rpns020_Rs7.00e1' ]
+IDs = [ 'NR2D_M1.4_Rpns070_Rs1.50e2', \
+        'GR2D_M1.4_Rpns070_Rs1.50e2' ]
+
+fig, ax = plt.subplots( 1, 1, figsize = (2,2) )
 
 for i in range( len( IDs ) ):
-
-    fig, ax = plt.subplots( 1, 1, figsize = (2,2) )
 
     ID = IDs[i]
 
     time, data \
       = np.loadtxt( dataDirectory + 'LatFlux_{:}.dat'.format( ID ) )
+
+    # Remove unperturbed file
+    time = np.copy( time[:-1] )
+    data = np.copy( data[:-1] )
 
     f = open( dataDirectory + 'LegendrePowerSpectrum_{:}.dat'.format( ID ) )
     s = f.readline()
@@ -35,12 +50,13 @@ for i in range( len( IDs ) ):
       = dataDirectory + 'ShockRadiusVsTime_{:}.dat'.format( ID )
     Time, RsAve, RsMin, RsMax = np.loadtxt( RsFileName )
 
-    print( time );exit()
+    # Remove unperturbed file
+    Time  = np.copy( Time [:-1] )
+    RsAve = np.copy( RsAve[:-1] )
+    RsMin = np.copy( RsMin[:-1] )
+    RsMax = np.copy( RsMax[:-1] )
 
     ind = np.where( RsMax > 1.1 * RsAve[0] )[0][0]
-
-    time = np.copy( time[:-1] )
-    data = np.copy( data[:-1] )
 
     time = np.copy( time[0:ind] )
     data = np.copy( data[0:ind] )
@@ -126,11 +142,13 @@ for i in range( len( IDs ) ):
     ax.set_xlabel \
       ( r'$\widetilde{T}\ \left[\mathrm{ms}\right]$', fontsize = 14 )
 
-    plt.show()
+    if (i+1) % 2 == 0:
+        ax.legend()
+        plt.show()
+        plt.close()
 #    IDD = ID.replace( 'Rs', 'Rsh' )
 #    plt.savefig( '/home/kkadoogan/Work/accretionShockPaper/Figures/' \
 #                   + 'fig.FFT_{:}.pdf'.format( IDD[3:] ), dpi = 300 )
-    plt.close()
 #    with open( dataDirectory + 'fft.dat', 'a' ) as f:
 #        f.write( '{:} {:.16e} {:.16e}\n' \
 #                 .format( ID, T, fwhm ) )

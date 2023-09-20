@@ -130,8 +130,8 @@ def MakeDataFile \
 if __name__ == "__main__":
 
     do1D         = False
-    generateData = False
-    plotData     = True
+    generateData = True
+    plotData     = False
 
     if do1D:
 
@@ -156,6 +156,8 @@ if __name__ == "__main__":
                 'NR2D_M2.8_Rpns020_Rs7.00e1', \
                 'GR2D_M2.8_Rpns020_Rs6.00e1', \
                 'GR2D_M2.8_Rpns020_Rs7.00e1' ]
+        IDs = [ 'NR2D_M1.4_Rpns070_Rs1.50e2', \
+                'GR2D_M1.4_Rpns070_Rs1.50e2' ]
 
     if( generateData ):
 
@@ -194,7 +196,7 @@ if __name__ == "__main__":
                              + 'ShockRadiusVsTime_{:}.dat'.format( ID )
             MakeDataFile \
               ( plotfileDirectory, plotfileBaseName, dataFileName, \
-                entropyThreshold, markEvery = 10, \
+                entropyThreshold, markEvery = 1, \
                 forceChoice = forceChoice, \
                 OW = OW )
 
@@ -238,8 +240,8 @@ if __name__ == "__main__":
                     m = 1
 
 
-            axs[m].plot( t / tauAd, ( RsAve - RsAve[0] ) / RsAve[0], \
-                         label = lab )
+            axs[m].plot( t[:-1] / tauAd, ( RsAve[:-1] - RsAve[0] ) / RsAve[0], \
+                         label = lab, markevery = 10 )
 
         text = r'$\texttt{GR1D\_M1.4\_Rpns040\_Rsh1.20e2}$'
         axs[0].text( 0.06, 0.87, text, \

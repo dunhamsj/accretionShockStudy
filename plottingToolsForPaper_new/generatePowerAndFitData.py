@@ -19,6 +19,13 @@ IDs = [ 'NR2D_M1.4_Rpns040_Rs1.20e2', \
         'NR2D_M2.8_Rpns020_Rs7.00e1', \
         'GR2D_M2.8_Rpns020_Rs7.00e1' ]
 
+IDs = [ 'NR2D_M1.4_Rpns070_Rs1.50e2', \
+        'GR2D_M1.4_Rpns070_Rs1.50e2' ]
+
+#IDs = [ 'GR2D_M2.0_Mdot0.1_Rs150', \
+#        'GR2D_M2.0_Mdot0.3_Rs150', \
+#        'GR2D_M2.0_Mdot0.5_Rs150' ]
+
 for i in range( len( IDs ) ):
 
     ID = IDs[i]
@@ -27,8 +34,16 @@ for i in range( len( IDs ) ):
     rsh  = np.float64( ID[20:26] )
     rpns = np.int64  ( ID[14:17] )
 
+    #rel  = ID[0:2]
+    #rsh  = np.float64( ID[-3:] )
+    #rpns = 40
+    #mdot = np.float64( ID[14:17] )
+
     plotfileDirectory \
       = plotfileRootDirectory + '2D/{:}/'.format( ID )
+
+    #plotfileDirectory \
+    #  = plotfileRootDirectory + '../oldData/{:}/'.format( ID )
 
     if not isdir( plotfileDirectory ):
         print( '\n{:} does not exist. Skipping.\n' \
@@ -36,6 +51,7 @@ for i in range( len( IDs ) ):
         continue
 
     plotfileBaseName = '{:}.plt'.format( ID )
+    #plotfileBaseName = '{:}.plt_'.format( ID )
 
     dataFileName = dataDirectory \
                      + 'LegendrePowerSpectrum_{:}.dat'.format( ID )
