@@ -9,28 +9,21 @@ plt.style.use( 'publication.sty' )
 from computeTimeScales import ComputeTimeScales
 from globalVariables import *
 
-with open( dataDirectory + 'fft.dat', 'w' ) as f:
-    f.write( '# Generated from fft.py\n' )
-    f.write( '# Model T/ms fwhm/ms\n' )
+writeData = True
 
-IDs = [ 'NR2D_M1.4_Rpns040_Rs1.20e2', \
-        'GR2D_M1.4_Rpns040_Rs1.20e2', \
-        'NR2D_M1.4_Rpns040_Rs1.50e2', \
-        'GR2D_M1.4_Rpns040_Rs1.50e2', \
-        'NR2D_M1.4_Rpns040_Rs1.75e2', \
-        'GR2D_M1.4_Rpns040_Rs1.75e2', \
-        'NR2D_M2.8_Rpns020_Rs6.00e1', \
-        'GR2D_M2.8_Rpns020_Rs6.00e1', \
-        'NR2D_M2.8_Rpns020_Rs7.00e1', \
-        'GR2D_M2.8_Rpns020_Rs7.00e1' ]
-IDs = [ 'NR2D_M1.4_Rpns070_Rs1.50e2', \
-        'GR2D_M1.4_Rpns070_Rs1.50e2' ]
+if writeData:
+    with open( dataDirectory + 'fft.dat', 'w' ) as f:
+        f.write( '# Generated from fft.py\n' )
+        f.write( '# Model T/ms fwhm/ms\n' )
 
-fig, ax = plt.subplots( 1, 1, figsize = (2,2) )
+IDs = [ '2D_M1.4_Rpns040_Rs1.20e2', \
+        '2D_M1.4_Rpns040_Rs1.50e2', \
+        '2D_M1.4_Rpns070_Rs1.50e2', \
+        '2D_M1.4_Rpns040_Rs1.75e2', \
+        '2D_M2.8_Rpns020_Rs6.00e1', \
+        '2D_M2.8_Rpns020_Rs7.00e1' ]
 
-for i in range( len( IDs ) ):
-
-    ID = IDs[i]
+def getFFT( ID ):
 
     time, data \
       = np.loadtxt( dataDirectory + 'LatFlux_{:}.dat'.format( ID ) )
@@ -56,7 +49,11 @@ for i in range( len( IDs ) ):
     RsMin = np.copy( RsMin[:-1] )
     RsMax = np.copy( RsMax[:-1] )
 
-    ind = np.where( RsMax > 1.1 * RsAve[0] )[0][0]
+    ind = np.where( RsMax > 1.1 * RsAve[0] )[0]
+    if ind.shape[0] == 0:
+        ind = -1
+    else:
+        ind = ind[0]
 
     time = np.copy( time[0:ind] )
     data = np.copy( data[0:ind] )
@@ -64,8 +61,6 @@ for i in range( len( IDs ) ):
     indt = np.where( time > tMin )[0]
     time = np.copy( time[indt] )
     data = np.copy( data[indt] )
-
-    dataFileName = 'FFT_{:}.dat'.format( ID )
 
     # Compute and plot FFT
 
@@ -90,33 +85,49 @@ for i in range( len( IDs ) ):
     y   = y  [::-1]
     ywf = ywf[::-1]
 
-    rel   = ID[0:2]
-    M_s   = ID[6:9]
+    yy   = np.abs( y   / y  .max() )
+    yywf = np.abs( ywf / ywf.max() )
+
+    return x, yy
+
+def getPeriodAndUncertainty( x, y ):
+
+    yInterp = sp.interpolate.interp1d( x, y )
+    xInterp = np.linspace( x.min(), x.max(), 1000 )
+    ind = np.where( yInterp( xInterp ) >= 0.5 )[0]
+    fwhm = xInterp[ind[-1]] - xInterp[ind[0]]
+    T    = xInterp[ np.argmax( yInterp(xInterp) ) ]
+
+    return T, fwhm, xInterp, ind
+
+for i in range( len( IDs ) ):
+
+    ID = IDs[i]
+
+    xNR, yNR = getFFT( 'NR' + ID )
+    xGR, yGR = getFFT( 'GR' + ID )
+    TNR, fwhmNR, xNRI, indNR = getPeriodAndUncertainty( xNR, yNR )
+    TGR, fwhmGR, xGRI, indGR = getPeriodAndUncertainty( xGR, yGR )
+
+    M_s   = ID[4:7]
     M     = np.float64( M_s )
-    rsh_s = ID[20:26]
+    rsh_s = ID[18:24]
     rsh   = np.float64( rsh_s )
-    rpns  = np.int64  ( ID[14:17] )
+    rpns  = np.int64  ( ID[12:15] )
 
     rInner = rpns
     rOuter = rsh
 
-    IDD = ID[5:].replace( 'Rs', 'Rsh' )
+    fig, ax = plt.subplots( 1, 1, figsize = (2,2) )
+
+    IDD = ID[3:].replace( 'Rs', 'Rsh' )
     ax.set_title( r'$\texttt{{{:}}}$'.format( IDD ), fontsize = 9 )
 
-    yy   = np.abs( y   / y  .max() )
-    yywf = np.abs( ywf / ywf.max() )
+    ax.plot( xNR, yNR, '-', label = 'NR' )
+    ax.plot( xGR, yGR, '-', label = 'GR' )
 
-    ax.plot( x, yy, '-', label = rel )
-    #yy = yywf
-    #ax.plot( x, yywf, '-', label = rel )
-
-    yInterp = sp.interpolate.interp1d( x, yy )
-    xInterp = np.linspace( x.min(), x.max(), 1000 )
-    ind = np.where( yInterp(xInterp) >= 0.5 )[0]
-    dt = xInterp[ind[-1]] - xInterp[ind[0]]
-    fwhm = dt
-    T    = xInterp[ np.argmax( yInterp(xInterp) ) ]
-    #ax.plot( [xInterp[ind[0]],xInterp[ind[-1]]], [0.5,0.5])
+    #ax.plot( [xNRI[indNR[0]],xNRI[indNR[-1]]], [0.5,0.5] )
+    #ax.plot( [xGRI[indGR[0]],xGRI[indGR[-1]]], [0.5,0.5] )
 
     if M_s == '1.4':
         ax.set_xlim( 0.0, 1.0e2 )
@@ -138,17 +149,24 @@ for i in range( len( IDs ) ):
     if M_s == '1.4' and rsh_s == '1.20e2':
         ax.legend( loc = 1 )
 
-    ax.set_ylabel( r'$\widetilde{F}^{r}_{\theta}/\max\limits_{\widetilde{T}}\left(\widetilde{F}^{1}_{2}\right)$', fontsize = 10 )
+    ax.set_ylabel( r'$\widetilde{F}^{r}_{\theta}/$' \
+                     + r'$\max\limits_{\widetilde{T}}$' \
+                     + r'$\left(\widetilde{F}^{1}_{2}\right)$', \
+                   fontsize = 10 )
     ax.set_xlabel \
       ( r'$\widetilde{T}\ \left[\mathrm{ms}\right]$', fontsize = 14 )
 
-    if (i+1) % 2 == 0:
-        ax.legend()
-        plt.show()
-        plt.close()
-#    IDD = ID.replace( 'Rs', 'Rsh' )
-#    plt.savefig( '/home/kkadoogan/Work/accretionShockPaper/Figures/' \
-#                   + 'fig.FFT_{:}.pdf'.format( IDD[3:] ), dpi = 300 )
-#    with open( dataDirectory + 'fft.dat', 'a' ) as f:
-#        f.write( '{:} {:.16e} {:.16e}\n' \
-#                 .format( ID, T, fwhm ) )
+    plt.show()
+
+    #figName = figuresDirectory + 'fig.FFT_{:}.pdf'.format( IDD )
+    #plt.savefig( figName, dpi = 300 )
+    #print( '\n  Saved {:}'.format( figName ) )
+
+    plt.close()
+
+    if writeData:
+        with open( dataDirectory + 'fft.dat', 'a' ) as f:
+            f.write( '{:} {:.16e} {:.16e}\n' \
+                     .format( 'NR' + ID, TNR, fwhmNR ) )
+            f.write( '{:} {:.16e} {:.16e}\n' \
+                     .format( 'GR' + ID, TGR, fwhmGR ) )

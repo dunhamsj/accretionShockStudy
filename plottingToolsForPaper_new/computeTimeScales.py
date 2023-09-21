@@ -4,6 +4,8 @@ import yt
 import numpy as np
 from gc import collect
 
+from globalVariables import *
+
 yt.funcs.mylog.setLevel(40) # Suppress initial yt output to screen
 
 def ComputeTimeScales( plotFileDirectory, rInner, rOuter, rel ):
@@ -96,89 +98,40 @@ def ComputeTimeScales( plotFileDirectory, rInner, rOuter, rel ):
 
 if __name__ == '__main__':
 
-    Rel  = [ 'NR', 'GR' ]
-    M    = [ '1.4', '2.8' ]
-    Rpns = [ '040', '020' ]
-    Rs   = [ [ '1.20e2', '1.50e2', '1.75e2' ], \
-             [ '6.00e1', '7.00e1' ] ]
+    IDs = [ 'NR1D_M1.4_Rpns040_Rs1.20e2', \
+            'GR1D_M1.4_Rpns040_Rs1.20e2', \
+            'NR1D_M1.4_Rpns040_Rs1.50e2', \
+            'GR1D_M1.4_Rpns040_Rs1.50e2', \
+            'NR1D_M1.4_Rpns070_Rs1.50e2', \
+            'GR1D_M1.4_Rpns070_Rs1.50e2', \
+            'NR1D_M1.4_Rpns040_Rs1.75e2', \
+            'GR1D_M1.4_Rpns040_Rs1.75e2', \
+            'NR1D_M2.8_Rpns020_Rs6.00e1', \
+            'GR1D_M2.8_Rpns020_Rs6.00e1', \
+            'NR1D_M2.8_Rpns020_Rs7.00e1', \
+            'GR1D_M2.8_Rpns020_Rs7.00e1' ]
 
-    with open( '../plottingData/T_SASI.dat', 'w' ) as f:
+    with open( dataDirectory + 'T_SASI.dat', 'w' ) as f:
 
-        f.write( '# Generated from accretionShockPaper/plottingScripts' \
-                   + '/computeTimeScales.py\n' )
+        f.write( '# Generated from computeTimeScales.py\n' )
         f.write( '# Model T_aa/ms T_ac/ms\n\n' )
-        for m in range( len( M ) ):
-            for rs in range( len( Rs[m] ) ):
-                for r in range( len( Rel ) ):
 
-                    ID = '{:}1D_M{:}_Rpns{:}_Rs{:}' \
-                         .format( Rel[r], M[m], Rpns[m], Rs[m][rs] )
+        for i in range( len( IDs ) ):
 
-                    Root = '/lump/data/accretionShockStudy/newData/1D/{:}/' \
-                           .format( ID )
-                    pfd = Root + '{:}.plt00000000'.format( ID )
-                    tAd, tAc, T_aa, T_ac \
-                      = ComputeTimeScales \
-                          ( pfd, np.float64( Rpns[m] ), \
-                            np.float64( Rs[m][rs] ), \
-                            Rel[r] )
-                    f.write( ID + ' {:.16e} {:.16e}\n'.format( T_aa, T_ac ) )
-    exit()
+            ID = IDs[i]
 
-    Root = '/home/kkadoogan/Work/Codes/thornado/SandBox/AMReX/Applications/'
+            rel  =             ID[0:2]
+            Rpns = np.float64( ID[14:17] )
+            Rsh  = np.float64( ID[20:26] )
 
-    rel = 'GR'
+            Root = plotfileRootDirectory + '1D/{:}/'.format( ID )
 
-    if   rel == 'NR':
-        Root += 'StandingAccretionShock_NonRelativistic/'
-    elif rel == 'GR':
-        Root += 'StandingAccretionShock_Relativistic/'
+            pfd = Root + '{:}.plt00000000'.format( ID )
 
-    M    = np.linspace( 1.4, 2.8, 2, dtype = np.float64 )
-    Mdot = np.array( [ 0.3 ], np.float64 )
-    Rs   = np.linspace( 30, 180, 64, dtype = np.float64 )
-    RPNS = np.linspace( 3 , 42 , 56, dtype = np.float64 )
+            tAd, tAc, T_aa, T_ac \
+              = ComputeTimeScales( pfd, Rpns, Rsh, rel )
 
-    for m in M:
-        tauAd = []
-        tauAc = []
-        for mdot in Mdot:
-            for rs in Rs:
-                tad = []
-                tac = []
-                for rpns in RPNS:
-                    rso = float( rs ) / float( rpns )
-                    if rso >= 1.5:
-                        ID \
-                          = '{:}1D_M{:.1f}_Mdot{:.1f}_Rs{:.3e}_RPNS{:.3e}' \
-                            .format( rel, m, mdot, rs, rpns )
-                        plotFileDirectory \
-                          = Root + '{:}.plt00000000/'.format( ID )
-
-                        rInner = np.float64( rpns )
-                        rOuter = np.float64( rs   )
-
-                        tAd, tAc \
-                          = ComputeTimeScales \
-                              ( plotFileDirectory, rInner, rOuter, rel )
-                        print( '{:}, {:.16e}, {:.16e}'.format( ID, tAd, tAc ) )
-                        tad.append( tAd )
-                        tac.append( tAc )
-                    else:
-                        tad.append( np.nan )
-                        tac.append( np.nan )
-                tauAd.append( tad )
-                tauAc.append( tac )
-
-        rs = str( [ rs for rs in Rs ] )
-        rp = str( [ rpns for rpns in RPNS ] )
-        header = '{:}\n{:}'.format( rs, rp )
-        tauAd = np.array( tauAd, np.float64 )
-        tauAc = np.array( tauAc, np.float64 )
-        np.savetxt( 'tauAd_{:}_M{:.1f}.dat' \
-                    .format( rel, m ), tauAd, header = header )
-        np.savetxt( 'tauAc_{:}_M{:.1f}.dat' \
-                    .format( rel, m ), tauAc, header = header )
+            f.write( ID + ' {:.16e} {:.16e}\n'.format( T_aa, T_ac ) )
 
     import os
     os.system( 'rm -rf __pycache__ ' )

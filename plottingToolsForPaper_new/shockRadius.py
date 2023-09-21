@@ -129,9 +129,9 @@ def MakeDataFile \
 
 if __name__ == "__main__":
 
-    do1D         = False
-    generateData = True
-    plotData     = False
+    do1D         = True
+    generateData = False
+    plotData     = True
 
     if do1D:
 
@@ -297,9 +297,9 @@ if __name__ == "__main__":
 
         plt.show()
 
-#        figName = figuresDirectory + 'fig.RadialResolution.pdf'
-#        plt.savefig( figName, dpi = 300 )
-#        print( '\n  Saved {:}'.format( figName ) )
+        #figName = figuresDirectory + 'fig.RadialResolution.pdf'
+        #plt.savefig( figName, dpi = 300 )
+        #print( '\n  Saved {:}'.format( figName ) )
 
     import os
     os.system( 'rm -rf __pycache__ ' )
