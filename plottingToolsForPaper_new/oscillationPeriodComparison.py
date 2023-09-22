@@ -50,12 +50,6 @@ for i in range( len( IDs ) ):
 
     ID = IDs[i]
 
-    dataFileName_NR \
-    = dataDirectory + 'NR2D_{:}_LegendrePowerSpectrum.dat'.format( ID )
-
-    dataFileName_GR \
-    = dataDirectory + 'GR2D_{:}_LegendrePowerSpectrum.dat'.format( ID )
-
     T_NR, dT_NR = Models['NR2D_'+ID]
     T_GR, dT_GR = Models['GR2D_'+ID]
 
@@ -165,12 +159,12 @@ ax.set_ylabel( r'$T\ \left[\mathrm{ms}\right]$' )
 yticks = np.linspace( 0, 80, 9 )
 ax.set_yticks( yticks )
 
-#plt.show()
+plt.show()
 
-figName = figuresDirectory + 'fig.OscillationPeriodComparison.pdf'
-figName = 'fig.png'
-plt.savefig( figName, dpi = 300 )
-print( '\n  Saved {:}'.format( figName ) )
+#figName = figuresDirectory + 'fig.OscillationPeriodComparison.pdf'
+#figName = 'fig.png'
+#plt.savefig( figName, dpi = 300 )
+#print( '\n  Saved {:}'.format( figName ) )
 
 plt.close()
 
