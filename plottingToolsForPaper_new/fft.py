@@ -9,7 +9,7 @@ plt.style.use( 'publication.sty' )
 from computeTimeScales import ComputeTimeScales
 from globalVariables import *
 
-writeData = True
+writeData = False
 
 if writeData:
     with open( dataDirectory + 'fft.dat', 'w' ) as f:
@@ -20,6 +20,7 @@ IDs = [ '2D_M1.4_Rpns040_Rs1.20e2', \
         '2D_M1.4_Rpns040_Rs1.50e2', \
         '2D_M1.4_Rpns070_Rs1.50e2', \
         '2D_M1.4_Rpns040_Rs1.75e2', \
+        '2D_M1.8_Rpns020_Rs7.00e1', \
         '2D_M2.8_Rpns020_Rs6.00e1', \
         '2D_M2.8_Rpns020_Rs7.00e1' ]
 

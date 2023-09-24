@@ -19,8 +19,7 @@ IDs = [ 'NR2D_M1.4_Rpns040_Rs1.20e2', \
         'NR2D_M2.8_Rpns020_Rs7.00e1', \
         'GR2D_M2.8_Rpns020_Rs7.00e1' ]
 
-IDs = [ 'NR2D_M1.4_Rpns070_Rs1.50e2', \
-        'GR2D_M1.4_Rpns070_Rs1.50e2' ]
+IDs = [ 'NR2D_M1.8_Rpns020_Rs7.00e1' ]
 
 #IDs = [ 'GR2D_M2.0_Mdot0.1_Rs150', \
 #        'GR2D_M2.0_Mdot0.3_Rs150', \

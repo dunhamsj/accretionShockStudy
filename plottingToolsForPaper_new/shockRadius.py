@@ -129,8 +129,8 @@ def MakeDataFile \
 
 if __name__ == "__main__":
 
-    do1D         = True
-    generateData = False
+    do1D         = False
+    generateData = True
     plotData     = True
 
     if do1D:
@@ -156,8 +156,7 @@ if __name__ == "__main__":
                 'NR2D_M2.8_Rpns020_Rs7.00e1', \
                 'GR2D_M2.8_Rpns020_Rs6.00e1', \
                 'GR2D_M2.8_Rpns020_Rs7.00e1' ]
-        IDs = [ 'NR2D_M1.4_Rpns070_Rs1.50e2', \
-                'GR2D_M1.4_Rpns070_Rs1.50e2' ]
+        IDs = [ 'GR2D_M1.8_Rpns020_Rs7.00e1' ]
 
     if( generateData ):
 

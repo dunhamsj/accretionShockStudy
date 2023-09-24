@@ -13,9 +13,9 @@ from globalVariables import *
 
 rootDirectory = plotfileRootDirectory + '2D/'
 
-M    = '1.4'
-Rpns = '070'
-Rs   = '1.50e2'
+M    = '1.8'
+Rpns = '020'
+Rs   = '7.00e1'
 
 ID = '2D_M{:}_Rpns{:}_Rs{:}'.format( M, Rpns, Rs )
 
@@ -70,10 +70,8 @@ def generateData( ID, rel ):
 ID_GR = 'GR' + ID
 ID_NR = 'NR' + ID
 
-generateData( ID_GR, 'GR' )
+#generateData( ID_GR, 'GR' )
 generateData( ID_NR, 'NR' )
-
-exit()
 
 timeGR, dataGR = np.loadtxt( dataDirectory + 'LatFlux_{:}.dat'.format( ID_GR ) )
 timeNR, dataNR = np.loadtxt( dataDirectory + 'LatFlux_{:}.dat'.format( ID_NR ) )
@@ -87,17 +85,18 @@ ax.plot( timeNR[:-1], dataNR[:-1], label = 'NR' )
 
 ax.set_yscale( 'symlog', linthresh = 1.0e40 )
 
-saveFigAs \
-  = '/home/kkadoogan/fig.{:}_{:}_SymLog_VsCoordinateTime.png' \
-    .format( field, ID )
-
 ax.legend()
 
 ax.grid()
 
 ax.set_xlabel( r'$\mathrm{Coordinate\ Time}\,\left[\mathrm{ms}\right]$' )
 
+#saveFigAs \
+#  = '/home/kkadoogan/fig.{:}_{:}_SymLog_VsCoordinateTime.png' \
+#    .format( field, ID )
 #plt.savefig( saveFigAs, dpi = 300 )
+#print( '\n  Saved {:}'.format( saveFigAs ) )
+
 plt.show()
 plt.close()
 
