@@ -156,7 +156,7 @@ if __name__ == "__main__":
                 'NR2D_M2.8_Rpns020_Rs7.00e1', \
                 'GR2D_M2.8_Rpns020_Rs6.00e1', \
                 'GR2D_M2.8_Rpns020_Rs7.00e1' ]
-        IDs = [ 'GR2D_M1.8_Rpns020_Rs7.00e1' ]
+        IDs = [ 'NR2D_M2.8_Rpns024_Rs6.40e1' ]
 
     if( generateData ):
 

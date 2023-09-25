@@ -21,7 +21,7 @@ Usage:
 #### ========== User Input ==========
 
 # ID to be used for naming purposes
-ID = 'GR2D_M2.8_Rpns020_Rs6.00e1'
+ID = 'NR2D_M1.8_Rpns020_Rs7.00e1'
 
 # Directory containing AMReX plotfiles
 plotfileDirectory \
@@ -33,12 +33,12 @@ plotfileDirectory \
 plotfileBaseName = ID + '.plt'
 
 # Field to plot
-field = 'DivV2'
+field = 'PF_D'
 
 # Scale of colorbar
 #zScale = 'None'
-#zScale = 'log'
-zScale = 'symlog'
+zScale = 'log'
+#zScale = 'symlog'
 linthresh = 1.0e-1#1.0e27
 
 # Coordinate system (currently supports 'cartesian' and 'spherical' )
@@ -46,17 +46,17 @@ CoordinateSystem = 'spherical'
 
 # Only use every <plotEvery> plotfile
 plotEvery   = 1
-maxPlotfile = 200
+maxPlotfile = -1
 
 # Colormap
-cmap = 'RdBu'
+cmap = 'viridis'
 
 # First and last snapshots and number of snapshots to include in movie
 SSi = -1 # -1 -> SSi = 0
 SSf = -1 # -1 -> plotfileArray.shape[0] - 1
 nSS = -1 # -1 -> plotfileArray.shape[0]
 
-UseCustomLimits = True
+UseCustomLimits = False
 vmin = -1.0e0
 vmax = -vmin
 

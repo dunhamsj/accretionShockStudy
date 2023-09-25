@@ -20,11 +20,11 @@ Usage:
 #### ========== User Input ==========
 
 # ID to be used for naming purposes
-ID = 'NR1D_M1.4_Rpns040_Rs180_Mdot0.3'
+ID = 'NR1D_M1.8_Rpns020_Rs7.00e1'
 
 # Directory containing AMReX plotfiles
 plotfileDirectory \
-  = '/lump/data/accretionShockStudy/newRuns/newProductionRuns/{:}'.format( ID )
+  = '/lump/data/accretionShockStudy/newData/1D/{:}/'.format( ID )
 
 # plotfile base name (e.g., Advection1D.plt######## -> Advection1D.plt )
 plotfileBaseName = ID + '.plt'
@@ -135,7 +135,7 @@ time_text = ax.text( 0.1, 0.9, '', transform = ax.transAxes, fontsize = 13 )
 
 ax.set_xlabel \
   ( r'$x^{{1}}\ \left[\mathrm{{{:}}}\right]$'.format( X1Units ), fontsize = 15 )
-ax.set_ylabel( Field  + ' ' + DataUnits   )
+#ax.set_ylabel( Field  + ' ' + DataUnits   )
 
 ax.set_xlim( xL, xH )
 ax.set_ylim( vmin, vmax )

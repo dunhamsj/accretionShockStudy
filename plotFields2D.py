@@ -12,15 +12,15 @@ rootDirectory \
   = '/home/dunhamsj/Work/thornado_GW/SandBox/AMReX/Applications/\
 StandingAccretionShock_NonRelativistic/'
 rootDirectory \
-  = '/lump/data/accretionShockStudy/'
+  = '/lump/data/accretionShockStudy/newData/2D/'
 
-ID = 'NR2D_M2.8_Mdot0.3_Rs6.00e1_RPNS2.00e1'
+ID = 'NR2D_M1.8_Rpns020_Rs7.00e1'
 
 field = 'AF_P'
 
 # Scale of colorbar
-zScale = 'None'
-#zScale = 'log'
+#zScale = 'None'
+zScale = 'log'
 #zScale = 'symlog'
 linthresh = 1.0e-2
 

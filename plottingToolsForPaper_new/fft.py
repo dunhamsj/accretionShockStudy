@@ -23,6 +23,7 @@ IDs = [ '2D_M1.4_Rpns040_Rs1.20e2', \
         '2D_M1.8_Rpns020_Rs7.00e1', \
         '2D_M2.8_Rpns020_Rs6.00e1', \
         '2D_M2.8_Rpns020_Rs7.00e1' ]
+IDs = [ '2D_M2.8_Rpns024_Rs6.40e1' ]
 
 def getFFT( ID ):
 
@@ -106,7 +107,7 @@ for i in range( len( IDs ) ):
     ID = IDs[i]
 
     xNR, yNR = getFFT( 'NR' + ID )
-    xGR, yGR = getFFT( 'GR' + ID )
+    xGR, yGR = getFFT( 'NR' + ID )
     TNR, fwhmNR, xNRI, indNR = getPeriodAndUncertainty( xNR, yNR )
     TGR, fwhmGR, xGRI, indGR = getPeriodAndUncertainty( xGR, yGR )
 
@@ -165,6 +166,7 @@ for i in range( len( IDs ) ):
 
     plt.close()
 
+    print( TNR )
     if writeData:
         with open( dataDirectory + 'fft.dat', 'a' ) as f:
             f.write( '{:} {:.16e} {:.16e}\n' \

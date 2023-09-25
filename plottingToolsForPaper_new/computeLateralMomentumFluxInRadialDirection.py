@@ -13,9 +13,9 @@ from globalVariables import *
 
 rootDirectory = plotfileRootDirectory + '2D/'
 
-M    = '1.8'
-Rpns = '020'
-Rs   = '7.00e1'
+M    = '2.8'
+Rpns = '024'
+Rs   = '6.40e1'
 
 ID = '2D_M{:}_Rpns{:}_Rs{:}'.format( M, Rpns, Rs )
 
@@ -73,7 +73,7 @@ ID_NR = 'NR' + ID
 #generateData( ID_GR, 'GR' )
 generateData( ID_NR, 'NR' )
 
-timeGR, dataGR = np.loadtxt( dataDirectory + 'LatFlux_{:}.dat'.format( ID_GR ) )
+#timeGR, dataGR = np.loadtxt( dataDirectory + 'LatFlux_{:}.dat'.format( ID_GR ) )
 timeNR, dataNR = np.loadtxt( dataDirectory + 'LatFlux_{:}.dat'.format( ID_NR ) )
 
 ### Plotting
@@ -83,7 +83,7 @@ fig, ax  = plt.subplots( 1, 1 )#, figsize = (12,8) )
 ax.plot( timeGR[:-1], dataGR[:-1], label = 'GR' )
 ax.plot( timeNR[:-1], dataNR[:-1], label = 'NR' )
 
-ax.set_yscale( 'symlog', linthresh = 1.0e40 )
+ax.set_yscale( 'symlog', linthresh = 1.0e49 )
 
 ax.legend()
 
