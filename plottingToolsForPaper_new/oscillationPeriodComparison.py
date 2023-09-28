@@ -10,6 +10,7 @@ IDs = [ 'M1.4_Rpns040_Rs1.20e2', \
         'M1.4_Rpns040_Rs1.50e2', \
         'M1.4_Rpns040_Rs1.75e2', \
         'M1.4_Rpns070_Rs1.50e2', \
+        'M1.8_Rpns020_Rs7.00e1', \
         'M2.8_Rpns020_Rs6.00e1', \
         'M2.8_Rpns020_Rs7.00e1' ]
 

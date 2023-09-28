@@ -106,6 +106,8 @@ if __name__ == '__main__':
             'GR1D_M1.4_Rpns070_Rs1.50e2', \
             'NR1D_M1.4_Rpns040_Rs1.75e2', \
             'GR1D_M1.4_Rpns040_Rs1.75e2', \
+            'NR1D_M1.8_Rpns020_Rs7.00e1', \
+            'GR1D_M1.8_Rpns020_Rs7.00e1', \
             'NR1D_M2.8_Rpns020_Rs6.00e1', \
             'GR1D_M2.8_Rpns020_Rs6.00e1', \
             'NR1D_M2.8_Rpns020_Rs7.00e1', \
