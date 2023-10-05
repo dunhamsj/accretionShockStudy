@@ -138,24 +138,37 @@ for i in range( len( IDs ) ):
         T_aa_GR = T_aa['GR1D_'+ID]
         T_ac_GR = T_ac['GR1D_'+ID]
 
-#        if m == 0:
-#            ratio_nrgr_LC_w = min( ratio_nrgr_LC_w, G_GR / G_NR )
-#            ratio_nrgr_LC_T = max( ratio_nrgr_LC_T, TGR / TNR )
-#            reldiff_aa_LC     \
-#              = max( reldiff_aa_LC, \
-#                     abs( TGR - T_aa_GR ) / ( 0.5 * ( TGR + T_aa_GR ) ) )
-#            reldiff_ac_LC     \
-#              = max( reldiff_ac_LC, \
-#                     abs( TGR - T_ac_GR ) / ( 0.5 * ( TGR + T_ac_GR ) ) )
-#        if m == 1:
-#            ratio_nrgr_HC_w = min( ratio_nrgr_HC_w, G_GR / G_NR )
-#            ratio_nrgr_HC_T = max( ratio_nrgr_HC_T, TGR / TNR )
-#            reldiff_aa_HC     \
-#              = max( reldiff_aa_HC, \
-#                     abs( TGR - T_aa_GR ) / ( 0.5 * ( TGR + T_aa_GR ) ) )
-#            reldiff_ac_HC     \
-#              = max( reldiff_ac_HC, \
-#                     abs( TGR - T_ac_GR ) / ( 0.5 * ( TGR + T_ac_GR ) ) )
+        M_s    = ID[1:4]
+        M      = np.float64( M_s )
+        rsh_s  = ID[15:21]
+        rsh    = np.float64( rsh_s )
+        rpns_s = ID[9:12]
+        rpns   = np.int64  ( rpns_s )
+
+        xi = '{:.1f}'.format( M / ( rpns / 20.0 ) )
+
+        if xi == '0.7':
+            ratio_nrgr_LC_w = min( ratio_nrgr_LC_w, G_GR / G_NR )
+            ratio_nrgr_LC_T = max( ratio_nrgr_LC_T, TGR / TNR )
+            reldiff_aa_LC     \
+              = max( reldiff_aa_LC, \
+                     abs( TGR - T_aa_GR ) / ( 0.5 * ( TGR + T_aa_GR ) ) )
+            reldiff_ac_LC     \
+              = max( reldiff_ac_LC, \
+                     abs( TGR - T_ac_GR ) / ( 0.5 * ( TGR + T_ac_GR ) ) )
+            wt_g1.append( wT_NR )
+            wt_g1.append( wT_GR )
+        if xi == '2.8':
+            ratio_nrgr_HC_w = min( ratio_nrgr_HC_w, G_GR / G_NR )
+            ratio_nrgr_HC_T = max( ratio_nrgr_HC_T, TGR / TNR )
+            reldiff_aa_HC     \
+              = max( reldiff_aa_HC, \
+                     abs( TGR - T_aa_GR ) / ( 0.5 * ( TGR + T_aa_GR ) ) )
+            reldiff_ac_HC     \
+              = max( reldiff_ac_HC, \
+                     abs( TGR - T_ac_GR ) / ( 0.5 * ( TGR + T_ac_GR ) ) )
+            wt_g1.append( wT_NR )
+            wt_g2.append( wT_GR )
 
         table += '  \\texttt{{NR\_{:}}}'.format( ID.replace( '_', '\\_' ) )
 
@@ -190,13 +203,6 @@ for i in range( len( IDs ) ):
 
         table += ' & {:.4f} \\\\\n'.format \
                    ( T_ac_GR )
-
-#        if m == 0:
-#            wt_g1.append( wT_NR )
-#            wt_g1.append( wT_GR )
-#        if m == 1:
-#            wt_g1.append( wT_NR )
-#            wt_g2.append( wT_GR )
 
 table += '  \\enddata\n'
 table += '  \\label{tab.results}\n'
@@ -235,26 +241,26 @@ table += \
 'of the shell in which we compute the power (see \\secref{sec.results}).}\n'
 table += '\\end{deluxetable}'
 
-#print( 'TGR/TNR (LC)       : {:.2f}'.format( ratio_nrgr_LC_T ) )
-#print( 'TGR/TNR (HC)       : {:.2f}'.format( ratio_nrgr_HC_T ) )
-#print( 'GGR/GNR (LC)       : {:.2f}'.format( ratio_nrgr_LC_w ) )
-#print( 'GGR/GNR (HC)       : {:.2f}'.format( ratio_nrgr_HC_w ) )
-#print( '|TGR-Taa|/avg. (LC): {:.2f}'.format( reldiff_aa_LC   ) )
-#print( '|TGR-Taa|/avg. (HC): {:.2f}'.format( reldiff_aa_HC   ) )
-#print( '|TGR-Tac|/avg. (LC): {:.2f}'.format( reldiff_ac_LC   ) )
-#print( '|TGR-Tac|/avg. (HC): {:.2f}'.format( reldiff_ac_HC   ) )
-#
-#wt_g1 = np.array( wt_g1 )
-#wt_g2 = np.array( wt_g2 )
-#
-#mu_g1 = wt_g1.mean()
-#mu_g2 = wt_g2.mean()
-#
-#print( 'omega * T (Group 1): {:.2f} +{:.2f} -{:.2f}' \
-#       .format( mu_g1, wt_g1.max() - mu_g1, mu_g1 - wt_g1.min() ) )
-#print( 'omega * T (Group 2): {:.2f} +{:.2f} -{:.2f}' \
-#       .format( mu_g2, wt_g2.max() - mu_g2, mu_g2 - wt_g2.min() ) )
+print( 'TGR/TNR (LC)       : {:.2f}'.format( ratio_nrgr_LC_T ) )
+print( 'TGR/TNR (HC)       : {:.2f}'.format( ratio_nrgr_HC_T ) )
+print( 'GGR/GNR (LC)       : {:.2f}'.format( ratio_nrgr_LC_w ) )
+print( 'GGR/GNR (HC)       : {:.2f}'.format( ratio_nrgr_HC_w ) )
+print( '|TGR-Taa|/avg. (LC): {:.2f}'.format( reldiff_aa_LC   ) )
+print( '|TGR-Taa|/avg. (HC): {:.2f}'.format( reldiff_aa_HC   ) )
+print( '|TGR-Tac|/avg. (LC): {:.2f}'.format( reldiff_ac_LC   ) )
+print( '|TGR-Tac|/avg. (HC): {:.2f}'.format( reldiff_ac_HC   ) )
+
+wt_g1 = np.array( wt_g1 )
+wt_g2 = np.array( wt_g2 )
+
+mu_g1 = wt_g1.mean()
+mu_g2 = wt_g2.mean()
+
+print( 'omega * T (Group 1): {:.2f} +{:.2f} -{:.2f}' \
+       .format( mu_g1, wt_g1.max() - mu_g1, mu_g1 - wt_g1.min() ) )
+print( 'omega * T (Group 2): {:.2f} +{:.2f} -{:.2f}' \
+       .format( mu_g2, wt_g2.max() - mu_g2, mu_g2 - wt_g2.min() ) )
 
 #print( table )
-with open( paperDirectory + 'resultsTable.tex', 'w' ) as tab:
-    tab.write( table )
+#with open( paperDirectory + 'resultsTable.tex', 'w' ) as tab:
+#    tab.write( table )
