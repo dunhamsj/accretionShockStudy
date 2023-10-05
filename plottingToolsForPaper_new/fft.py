@@ -9,17 +9,23 @@ plt.style.use( 'publication.sty' )
 from computeTimeScales import ComputeTimeScales
 from globalVariables import *
 
-writeData = True
+writeData = False
 
 if writeData:
     with open( dataDirectory + 'fft.dat', 'w' ) as f:
         f.write( '# Generated from fft.py\n' )
         f.write( '# Model T/ms fwhm/ms\n' )
 
-IDs = [ '2D_M1.4_Rpns040_Rs1.20e2', \
+IDs = [ '2D_M1.4_Rpns070_Rs1.50e2', \
+        '2D_M1.4_Rpns040_Rs1.20e2', \
         '2D_M1.4_Rpns040_Rs1.50e2', \
-        '2D_M1.4_Rpns070_Rs1.50e2', \
         '2D_M1.4_Rpns040_Rs1.75e2', \
+        '2D_M1.8_Rpns020_Rs7.00e1', \
+        '2D_M2.8_Rpns020_Rs6.00e1', \
+        '2D_M2.8_Rpns020_Rs7.00e1' ]
+
+IDs = [ '2D_M1.4_Rpns070_Rs1.50e2', \
+        '2D_M1.4_Rpns040_Rs1.50e2', \
         '2D_M1.8_Rpns020_Rs7.00e1', \
         '2D_M2.8_Rpns020_Rs6.00e1', \
         '2D_M2.8_Rpns020_Rs7.00e1' ]
@@ -110,11 +116,12 @@ for i in range( len( IDs ) ):
     TNR, fwhmNR, xNRI, indNR = getPeriodAndUncertainty( xNR, yNR )
     TGR, fwhmGR, xGRI, indGR = getPeriodAndUncertainty( xGR, yGR )
 
-    M_s   = ID[4:7]
-    M     = np.float64( M_s )
-    rsh_s = ID[18:24]
-    rsh   = np.float64( rsh_s )
-    rpns  = np.int64  ( ID[12:15] )
+    M_s    = ID[4:7]
+    M      = np.float64( M_s )
+    rsh_s  = ID[18:24]
+    rsh    = np.float64( rsh_s )
+    rpns_s = ID[12:15]
+    rpns   = np.int64  ( rpns_s )
 
     rInner = rpns
     rOuter = rsh
@@ -131,11 +138,13 @@ for i in range( len( IDs ) ):
     #ax.plot( [xGRI[indGR[0]],xGRI[indGR[-1]]], [0.5,0.5] )
 
     if M_s == '1.4':
-        ax.set_xlim( 0.0, 1.0e2 )
+        xlim = [ 0.0, 1.0e2 ]
+        ax.set_xlim( xlim )
         ax.xaxis.set_major_locator( MultipleLocator( 25 ) )
         ax.xaxis.set_minor_locator( MultipleLocator( 10 ) )
     else:
-        ax.set_xlim( 0.0, 2.0e1 )
+        xlim = [ 0.0, 2.0e1 ]
+        ax.set_xlim( xlim )
         xticks = np.linspace( 0, 20, 21, dtype = np.int64 )
         ax.xaxis.set_major_locator( MultipleLocator( 5 ) )
         ax.xaxis.set_minor_locator( MultipleLocator( 1 ) )
@@ -147,8 +156,11 @@ for i in range( len( IDs ) ):
 
     ax.grid()
 
-    if M_s == '1.4' and rsh_s == '1.20e2':
+    if M_s == '1.4' and rpns_s == '070' and rsh_s == '1.50e2':
         ax.legend( loc = 1 )
+
+    xi = '{:.1f}'.format( M / ( rpns / 20.0 ) )
+    ax.text( 0.5 * sum( xlim ), 0.025, r'$\xi={:}$'.format( xi ) )
 
     ax.set_ylabel( r'$\widetilde{F}^{r}_{\theta}/$' \
                      + r'$\max\limits_{\widetilde{T}}$' \
@@ -157,11 +169,11 @@ for i in range( len( IDs ) ):
     ax.set_xlabel \
       ( r'$\widetilde{T}\ \left[\mathrm{ms}\right]$', fontsize = 14 )
 
-    plt.show()
+    #plt.show()
 
-    #figName = figuresDirectory + 'fig.FFT_{:}.pdf'.format( IDD )
-    #plt.savefig( figName, dpi = 300 )
-    #print( '\n  Saved {:}'.format( figName ) )
+    figName = figuresDirectory + 'fig.FFT_{:}.pdf'.format( IDD )
+    plt.savefig( figName, dpi = 300 )
+    print( '\n  Saved {:}'.format( figName ) )
 
     plt.close()
 

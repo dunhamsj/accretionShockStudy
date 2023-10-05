@@ -126,7 +126,7 @@ if __name__ == '__main__':
             Rpns = np.float64( ID[14:17] )
             Rsh  = np.float64( ID[20:26] )
 
-            Root = plotfileRootDirectory + '1D/{:}/'.format( ID )
+            Root = plotfileRootDirectory + '{:}/'.format( ID )
 
             pfd = Root + '{:}.plt00000000'.format( ID )
 

@@ -7,15 +7,6 @@ from os.path import isfile
 
 from globalVariables import *
 
-Models = {}
-with open( dataDirectory + 'fft.dat' ) as f:
-    i = -1
-    for line in f:
-       i += 1
-       if i < 2: continue
-       x = line.split()
-       Models[x[0]] = [ np.float64( x[1] ), np.float64( x[2] ) ]
-
 IDs = [ 'M1.4_Rpns040_Rs1.20e2', \
         'M1.4_Rpns040_Rs1.50e2', \
         'M1.4_Rpns040_Rs1.75e2', \
@@ -98,13 +89,6 @@ for i in range( len( IDs ) ):
         ax.errorbar( Rsh, G_GR , ls = 'none', \
                      yerr = dG_GR, capsize = cs, \
                      c = col[1], marker = mkr[1], mfc = 'none' )
-
-    if Rpns == '070':
-        ax.text( 1.03 * Rsh, 0.9 * G_NR, \
-                 r'$R_{\mathrm{PNS}}=70\,\mathrm{km}$' )
-
-    T_NR, dT_NR = Models['NR2D_'+ID]
-    T_GR, dT_GR = Models['GR2D_'+ID]
 
 handles, labels = ax.get_legend_handles_labels()
 mapping = [ 0, 1 ]

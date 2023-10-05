@@ -11,6 +11,8 @@ from globalVariables import *
 IDs = [ '1D_M1.4_Rpns040_Rs1.20e2', \
         '1D_M1.4_Rpns040_Rs1.50e2', \
         '1D_M1.4_Rpns040_Rs1.75e2', \
+        '1D_M1.4_Rpns070_Rs1.50e2', \
+        '1D_M1.8_Rpns020_Rs7.00e1', \
         '1D_M2.8_Rpns020_Rs6.00e1', \
         '1D_M2.8_Rpns020_Rs7.00e1' ]
 
@@ -22,7 +24,7 @@ c = 2.99792458e5
 
 # Generate data files
 
-plotfileDirectory = plotfileRootDirectory + '1D/'
+plotfileDirectory = plotfileRootDirectory
 
 generateData = True
 plotData     = True

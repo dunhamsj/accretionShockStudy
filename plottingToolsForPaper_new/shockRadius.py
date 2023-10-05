@@ -131,7 +131,7 @@ if __name__ == "__main__":
 
     do1D         = False
     generateData = True
-    plotData     = True
+    plotData     = False
 
     if do1D:
 
@@ -147,16 +147,19 @@ if __name__ == "__main__":
     else:
 
         IDs = [ 'NR2D_M1.4_Rpns040_Rs1.20e2', \
-                'NR2D_M1.4_Rpns040_Rs1.50e2', \
-                'NR2D_M1.4_Rpns040_Rs1.75e2', \
                 'GR2D_M1.4_Rpns040_Rs1.20e2', \
+                'NR2D_M1.4_Rpns040_Rs1.50e2', \
                 'GR2D_M1.4_Rpns040_Rs1.50e2', \
+                'NR2D_M1.4_Rpns070_Rs1.50e2', \
+                'GR2D_M1.4_Rpns070_Rs1.50e2', \
+                'NR2D_M1.4_Rpns040_Rs1.75e2', \
                 'GR2D_M1.4_Rpns040_Rs1.75e2', \
                 'NR2D_M2.8_Rpns020_Rs6.00e1', \
-                'NR2D_M2.8_Rpns020_Rs7.00e1', \
                 'GR2D_M2.8_Rpns020_Rs6.00e1', \
+                'NR2D_M2.8_Rpns020_Rs7.00e1', \
                 'GR2D_M2.8_Rpns020_Rs7.00e1' ]
-        IDs = [ 'NR2D_M1.8_Rpns020_Rs7.00e1' ]
+        IDs = [ 'NR2D_M1.8_Rpns020_Rs7.00e1', \
+                'GR2D_M1.8_Rpns020_Rs7.00e1' ]
 
     if( generateData ):
 
@@ -181,7 +184,7 @@ if __name__ == "__main__":
             else:
 
                 plotfileDirectory \
-                  = plotfileRootDirectory + '2D/{:}/'.format( ID )
+                  = plotfileRootDirectory + '{:}/'.format( ID )
 
             plotfileBaseName = ID + '.plt'
             entropyThreshold = 1.0e15
