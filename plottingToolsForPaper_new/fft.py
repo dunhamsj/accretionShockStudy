@@ -5,6 +5,7 @@ import scipy as sp
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
 plt.style.use( 'publication.sty' )
+plt.rcParams.update( { 'figure.autolayout' : True } )
 
 from computeTimeScales import ComputeTimeScales
 from globalVariables import *
@@ -17,17 +18,8 @@ if writeData:
         f.write( '# Model T/ms fwhm/ms\n' )
 
 IDs = [ '2D_M1.4_Rpns070_Rs1.50e2', \
-        '2D_M1.4_Rpns040_Rs1.20e2', \
-        '2D_M1.4_Rpns040_Rs1.50e2', \
-        '2D_M1.4_Rpns040_Rs1.75e2', \
-        '2D_M1.8_Rpns020_Rs7.00e1', \
-        '2D_M2.8_Rpns020_Rs6.00e1', \
-        '2D_M2.8_Rpns020_Rs7.00e1' ]
-
-IDs = [ '2D_M1.4_Rpns070_Rs1.50e2', \
         '2D_M1.4_Rpns040_Rs1.50e2', \
         '2D_M1.8_Rpns020_Rs7.00e1', \
-        '2D_M2.8_Rpns020_Rs6.00e1', \
         '2D_M2.8_Rpns020_Rs7.00e1' ]
 
 def getFFT( ID ):
@@ -126,10 +118,10 @@ for i in range( len( IDs ) ):
     rInner = rpns
     rOuter = rsh
 
-    fig, ax = plt.subplots( 1, 1, figsize = (2,2) )
+    fig, ax = plt.subplots( 1, 1 )
 
     IDD = ID[3:].replace( 'Rs', 'Rsh' )
-    ax.set_title( r'$\texttt{{{:}}}$'.format( IDD ), fontsize = 9 )
+    ax.set_title( r'$\texttt{{{:}}}$'.format( IDD ), fontsize = 18 )
 
     ax.plot( xNR, yNR, '-', label = 'NR' )
     ax.plot( xGR, yGR, '-', label = 'GR' )
@@ -157,17 +149,21 @@ for i in range( len( IDs ) ):
     ax.grid()
 
     if M_s == '1.4' and rpns_s == '070' and rsh_s == '1.50e2':
-        ax.legend( loc = 1 )
+        ax.legend( loc = 1, prop = { 'size' : 15 } )
 
     xi = '{:.1f}'.format( M / ( rpns / 20.0 ) )
-    ax.text( 0.5 * sum( xlim ), 0.025, r'$\xi={:}$'.format( xi ) )
+    ax.text( 0.5 * sum( xlim ), 0.025, r'$\xi={:}$'.format( xi ), \
+             fontsize = 18 )
 
     ax.set_ylabel( r'$\widetilde{F}^{r}_{\theta}/$' \
                      + r'$\max\limits_{\widetilde{T}}$' \
                      + r'$\left(\widetilde{F}^{1}_{2}\right)$', \
-                   fontsize = 10 )
+                   fontsize = 20 )
     ax.set_xlabel \
-      ( r'$\widetilde{T}\ \left[\mathrm{ms}\right]$', fontsize = 14 )
+      ( r'$\widetilde{T}\ \left[\mathrm{ms}\right]$', fontsize = 20 )
+
+    plt.yticks( fontsize = 20 )
+    plt.xticks( fontsize = 20 )
 
     #plt.show()
 

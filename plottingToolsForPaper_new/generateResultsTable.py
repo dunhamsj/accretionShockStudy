@@ -52,17 +52,27 @@ table = \
   \\startdata\n\
 '
 
-ratio_nrgr_LC_w = +np.inf
-ratio_nrgr_HC_w = +np.inf
-ratio_nrgr_LC_T = -np.inf
-ratio_nrgr_HC_T = -np.inf
-reldiff_aa_LC   = -np.inf
-reldiff_ac_LC   = -np.inf
-reldiff_aa_HC   = -np.inf
-reldiff_ac_HC   = -np.inf
+GrowthRateRatioGRoverNRxi04 = +np.inf
+GrowthRateRatioGRoverNRxi07 = +np.inf
+GrowthRateRatioGRoverNRxi18 = +np.inf
+GrowthRateRatioGRoverNRxi28 = +np.inf
+PeriodRatioGRoverNRxi04     = -np.inf
+PeriodRatioGRoverNRxi07     = -np.inf
+PeriodRatioGRoverNRxi18     = -np.inf
+PeriodRatioGRoverNRxi28     = -np.inf
+RelDiffAAxi04               = -np.inf
+RelDiffAAxi07               = -np.inf
+RelDiffAAxi18               = -np.inf
+RelDiffAAxi28               = -np.inf
+RelDiffACxi04               = -np.inf
+RelDiffACxi07               = -np.inf
+RelDiffACxi18               = -np.inf
+RelDiffACxi28               = -np.inf
 
-wt_g1 = []
-wt_g2 = []
+omegaT_xi04 = []
+omegaT_xi07 = []
+omegaT_xi18 = []
+omegaT_xi28 = []
 
 for i in range( len( IDs ) ):
 
@@ -147,28 +157,77 @@ for i in range( len( IDs ) ):
 
         xi = '{:.1f}'.format( M / ( rpns / 20.0 ) )
 
+        if xi == '0.4':
+
+            GrowthRateRatioGRoverNRxi04 \
+              = min( GrowthRateRatioGRoverNRxi04, G_GR / G_NR )
+
+            PeriodRatioGRoverNRxi04 = max( PeriodRatioGRoverNRxi04, TGR / TNR )
+
+            RelDiffAAxi04     \
+              = max( RelDiffAAxi04, \
+                     abs( TGR - T_aa_GR ) / ( 0.5 * ( TGR + T_aa_GR ) ) )
+
+            RelDiffACxi04     \
+              = max( RelDiffACxi04, \
+                     abs( TGR - T_ac_GR ) / ( 0.5 * ( TGR + T_ac_GR ) ) )
+
+            omegaT_xi04.append( wT_NR )
+            omegaT_xi04.append( wT_GR )
+
         if xi == '0.7':
-            ratio_nrgr_LC_w = min( ratio_nrgr_LC_w, G_GR / G_NR )
-            ratio_nrgr_LC_T = max( ratio_nrgr_LC_T, TGR / TNR )
-            reldiff_aa_LC     \
-              = max( reldiff_aa_LC, \
+
+            GrowthRateRatioGRoverNRxi07 \
+              = min( GrowthRateRatioGRoverNRxi07, G_GR / G_NR )
+
+            PeriodRatioGRoverNRxi07 = max( PeriodRatioGRoverNRxi07, TGR / TNR )
+
+            RelDiffAAxi07     \
+              = max( RelDiffAAxi07, \
                      abs( TGR - T_aa_GR ) / ( 0.5 * ( TGR + T_aa_GR ) ) )
-            reldiff_ac_LC     \
-              = max( reldiff_ac_LC, \
+
+            RelDiffACxi07     \
+              = max( RelDiffACxi07, \
                      abs( TGR - T_ac_GR ) / ( 0.5 * ( TGR + T_ac_GR ) ) )
-            wt_g1.append( wT_NR )
-            wt_g1.append( wT_GR )
+
+            omegaT_xi07.append( wT_NR )
+            omegaT_xi07.append( wT_GR )
+
+        if xi == '1.8':
+
+            GrowthRateRatioGRoverNRxi18 \
+              = min( GrowthRateRatioGRoverNRxi18, G_GR / G_NR )
+
+            PeriodRatioGRoverNRxi18 = max( PeriodRatioGRoverNRxi18, TGR / TNR )
+
+            RelDiffAAxi18     \
+              = max( RelDiffAAxi18, \
+                     abs( TGR - T_aa_GR ) / ( 0.5 * ( TGR + T_aa_GR ) ) )
+
+            RelDiffACxi18     \
+              = max( RelDiffACxi18, \
+                     abs( TGR - T_ac_GR ) / ( 0.5 * ( TGR + T_ac_GR ) ) )
+
+            omegaT_xi18.append( wT_NR )
+            omegaT_xi18.append( wT_GR )
+
         if xi == '2.8':
-            ratio_nrgr_HC_w = min( ratio_nrgr_HC_w, G_GR / G_NR )
-            ratio_nrgr_HC_T = max( ratio_nrgr_HC_T, TGR / TNR )
-            reldiff_aa_HC     \
-              = max( reldiff_aa_HC, \
+
+            GrowthRateRatioGRoverNRxi28 \
+              = min( GrowthRateRatioGRoverNRxi28, G_GR / G_NR )
+
+            PeriodRatioGRoverNRxi28 = max( PeriodRatioGRoverNRxi28, TGR / TNR )
+
+            RelDiffAAxi28     \
+              = max( RelDiffAAxi28, \
                      abs( TGR - T_aa_GR ) / ( 0.5 * ( TGR + T_aa_GR ) ) )
-            reldiff_ac_HC     \
-              = max( reldiff_ac_HC, \
+
+            RelDiffACxi28     \
+              = max( RelDiffACxi28, \
                      abs( TGR - T_ac_GR ) / ( 0.5 * ( TGR + T_ac_GR ) ) )
-            wt_g1.append( wT_NR )
-            wt_g2.append( wT_GR )
+
+            omegaT_xi28.append( wT_NR )
+            omegaT_xi28.append( wT_GR )
 
         table += '  \\texttt{{NR\_{:}}}'.format( ID.replace( '_', '\\_' ) )
 
@@ -241,25 +300,61 @@ table += \
 'of the shell in which we compute the power (see \\secref{sec.results}).}\n'
 table += '\\end{deluxetable}'
 
-print( 'TGR/TNR (LC)       : {:.2f}'.format( ratio_nrgr_LC_T ) )
-print( 'TGR/TNR (HC)       : {:.2f}'.format( ratio_nrgr_HC_T ) )
-print( 'GGR/GNR (LC)       : {:.2f}'.format( ratio_nrgr_LC_w ) )
-print( 'GGR/GNR (HC)       : {:.2f}'.format( ratio_nrgr_HC_w ) )
-print( '|TGR-Taa|/avg. (LC): {:.2f}'.format( reldiff_aa_LC   ) )
-print( '|TGR-Taa|/avg. (HC): {:.2f}'.format( reldiff_aa_HC   ) )
-print( '|TGR-Tac|/avg. (LC): {:.2f}'.format( reldiff_ac_LC   ) )
-print( '|TGR-Tac|/avg. (HC): {:.2f}'.format( reldiff_ac_HC   ) )
+print( '\\newcommand{{\\PeriodRatioGRoverNRxiA}}{{{:.2f}}}' \
+       .format( PeriodRatioGRoverNRxi04 ) )
+print( '\\newcommand{{\\PeriodRatioGRoverNRxiB}}{{{:.2f}}}' \
+       .format( PeriodRatioGRoverNRxi07 ) )
+print( '\\newcommand{{\\PeriodRatioGRoverNRxiC}}{{{:.2f}}}' \
+       .format( PeriodRatioGRoverNRxi18 ) )
+print( '\\newcommand{{\\PeriodRatioGRoverNRxiD}}{{{:.2f}}}' \
+       .format( PeriodRatioGRoverNRxi28 ) )
+print( '\\newcommand{{\\GrowthRateRatioGRoverNRxiA}}{{{:.2f}}}' \
+       .format( GrowthRateRatioGRoverNRxi04 ) )
+print( '\\newcommand{{\\GrowthRateRatioGRoverNRxiB}}{{{:.2f}}}' \
+       .format( GrowthRateRatioGRoverNRxi07 ) )
+print( '\\newcommand{{\\GrowthRateRatioGRoverNRxiC}}{{{:.2f}}}' \
+       .format( GrowthRateRatioGRoverNRxi18 ) )
+print( '\\newcommand{{\\GrowthRateRatioGRoverNRxiD}}{{{:.2f}}}' \
+       .format( GrowthRateRatioGRoverNRxi28 ) )
+print( '\\newcommand{{\\RelDiffAAxiA}}{{{:.2f}}}' \
+       .format( RelDiffAAxi04 ) )
+print( '\\newcommand{{\\RelDiffAAxiB}}{{{:.2f}}}' \
+       .format( RelDiffAAxi07 ) )
+print( '\\newcommand{{\\RelDiffAAxiC}}{{{:.2f}}}' \
+       .format( RelDiffAAxi18 ) )
+print( '\\newcommand{{\\RelDiffAAxiD}}{{{:.2f}}}' \
+       .format( RelDiffAAxi28 ) )
+print( '\\newcommand{{\\RelDiffACxiA}}{{{:.2f}}}' \
+       .format( RelDiffACxi04 ) )
+print( '\\newcommand{{\\RelDiffACxiB}}{{{:.2f}}}' \
+       .format( RelDiffACxi07 ) )
+print( '\\newcommand{{\\RelDiffACxiC}}{{{:.2f}}}' \
+       .format( RelDiffACxi18 ) )
+print( '\\newcommand{{\\RelDiffACxiD}}{{{:.2f}}}' \
+       .format( RelDiffACxi28 ) )
 
-wt_g1 = np.array( wt_g1 )
-wt_g2 = np.array( wt_g2 )
+omegaT_xi04 = np.array( omegaT_xi04 )
+omegaT_xi07 = np.array( omegaT_xi07 )
+omegaT_xi18 = np.array( omegaT_xi18 )
+omegaT_xi28 = np.array( omegaT_xi28 )
 
-mu_g1 = wt_g1.mean()
-mu_g2 = wt_g2.mean()
+mu_xi04 = omegaT_xi04.mean()
+mu_xi07 = omegaT_xi07.mean()
+mu_xi18 = omegaT_xi18.mean()
+mu_xi28 = omegaT_xi28.mean()
 
-print( 'omega * T (Group 1): {:.2f} +{:.2f} -{:.2f}' \
-       .format( mu_g1, wt_g1.max() - mu_g1, mu_g1 - wt_g1.min() ) )
-print( 'omega * T (Group 2): {:.2f} +{:.2f} -{:.2f}' \
-       .format( mu_g2, wt_g2.max() - mu_g2, mu_g2 - wt_g2.min() ) )
+print( 'omega * T (xi = 0.4): {:.2f} +{:.2f} -{:.2f}' \
+       .format( mu_xi04, omegaT_xi04.max() - mu_xi04, \
+                mu_xi04 - omegaT_xi04.min() ) )
+print( 'omega * T (xi = 0.7): {:.2f} +{:.2f} -{:.2f}' \
+       .format( mu_xi07, omegaT_xi07.max() - mu_xi07, \
+                mu_xi07 - omegaT_xi07.min() ) )
+print( 'omega * T (xi = 1.8): {:.2f} +{:.2f} -{:.2f}' \
+       .format( mu_xi18, omegaT_xi18.max() - mu_xi18, \
+                mu_xi18 - omegaT_xi18.min() ) )
+print( 'omega * T (xi = 2.8): {:.2f} +{:.2f} -{:.2f}' \
+       .format( mu_xi28, omegaT_xi28.max() - mu_xi28, \
+                mu_xi28 - omegaT_xi28.min() ) )
 
 #print( table )
 #with open( paperDirectory + 'resultsTable.tex', 'w' ) as tab:

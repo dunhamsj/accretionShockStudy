@@ -8,10 +8,10 @@ plt.style.use( 'publication.sty' )
 from UtilitiesModule import GetFileArray, GetData
 from globalVariables import *
 
-IDs = [ '1D_M1.4_Rpns040_Rs1.20e2', \
+IDs = [ '1D_M1.4_Rpns070_Rs1.50e2', \
+        '1D_M1.4_Rpns040_Rs1.20e2', \
         '1D_M1.4_Rpns040_Rs1.50e2', \
         '1D_M1.4_Rpns040_Rs1.75e2', \
-        '1D_M1.4_Rpns070_Rs1.50e2', \
         '1D_M1.8_Rpns020_Rs7.00e1', \
         '1D_M2.8_Rpns020_Rs6.00e1', \
         '1D_M2.8_Rpns020_Rs7.00e1' ]
@@ -24,9 +24,9 @@ c = 2.99792458e5
 
 # Generate data files
 
-plotfileDirectory = plotfileRootDirectory
+plotfileDirectory = plotfileRootDirectory + '1D/'
 
-generateData = True
+generateData = False
 plotData     = True
 
 if generateData:
@@ -34,6 +34,8 @@ if generateData:
     for i in range( len( IDs ) ):
 
         ID = IDs[i]
+
+        print( '  Generating data for {:}'.format( ID ) )
 
         # GR
 
@@ -127,7 +129,7 @@ if generateData:
 
         rsh  = np.float64( ID[-6:] )
         rpns = np.int64  ( ID[12:15] )
-        ind = np.where( ( X1 < rsh ) & ( X1 > rpns ) )[0][:-1]
+        ind = np.where( ( X1 < 0.99*rsh ) & ( X1 > rpns ) )[0][:-1]
 
         X1         = np.copy( X1        [ind] )
         lambda0_GR = np.copy( lambda0_GR[ind] )
@@ -185,10 +187,10 @@ if plotData:
         else:
             m = 0
 
-        if i < 3:
+        if i < 4:
             j = i
         else:
-            j = i - 3
+            j = i - 4
 
         l1, \
           = axs[m].plot( eta, lambda1_GR / lambda1_NR, \
@@ -210,20 +212,23 @@ if plotData:
 
     axs[0].grid()
     axs[1].grid()
-    axs[0].set_xlim( -0.1, 1.1 )
-    axs[1].set_xlim( -0.1, 1.1 )
+    axs[0].set_xlim( -0.05, 1.05 )
+    axs[1].set_xlim( -0.05, 1.05 )
 
     handles = np.array( handles )
 
-    label1p = r'$\lambda^{r,\mathrm{GR}}_{+}/\lambda^{r,\mathrm{NR}}_{+}$'
-    label2p = r'$\lambda^{\theta,\mathrm{GR}}_{+}/\lambda^{\theta,\mathrm{NR}}_{+}$'
-    label0  = r'$\lambda^{r,\mathrm{GR}}_{0}/\lambda^{r,\mathrm{NR}}_{0}$'
+    label1p \
+      = r'$\lambda^{r,\mathrm{GR}}_{+}/\lambda^{r,\mathrm{NR}}_{+}$'
+    label2p \
+      = r'$\lambda^{\theta,\mathrm{GR}}_{+}/\lambda^{\theta,\mathrm{NR}}_{+}$'
+    label0 \
+      = r'$\lambda^{r,\mathrm{GR}}_{0}/\lambda^{r,\mathrm{NR}}_{0}$'
 
     label1 = [ label1p, label2p, label0 ]
 
-    legend1 = axs[0].legend( handles[0]    , label1 , loc = 8 )
-    legend2 = axs[0].legend( handles[0:3,0], labelLC, loc = 4 )
-    legend3 = axs[1].legend( handles[3:,0] , labelHC, loc = 4 )
+    legend1 = axs[0].legend( handles[0]    , label1 , loc = (0.40,0.02) )
+    legend2 = axs[0].legend( handles[0:4,0], labelLC, loc = (0.62,0.02) )
+    legend3 = axs[1].legend( handles[4:,0] , labelHC, loc = (0.62,0.02))
 
     axs[-1].set_xlabel( r'$\eta$', fontsize = 15 )
     axs[0].add_artist( legend1 )
@@ -251,11 +256,11 @@ if plotData:
     yticks = [ 0.5, 0.6, 0.7, 0.8, 0.9 ]
     axs[1].set_yticks( yticks )
 
-    plt.show()
+    #plt.show()
 
-    #figName = figuresDirectory + 'fig.SignalSpeedRatios.pdf'
-    #plt.savefig( figName, dpi = 300 )
-    #print( '\n  Saved {:}'.format( figName ) )
+    figName = figuresDirectory + 'fig.SignalSpeedRatios.pdf'
+    plt.savefig( figName, dpi = 300 )
+    print( '\n  Saved {:}'.format( figName ) )
 
 import os
 os.system( 'rm -rf __pycache__ ' )
