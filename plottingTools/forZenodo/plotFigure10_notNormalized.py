@@ -15,17 +15,6 @@ with open( dataDirectory + 'fft.dat' ) as f:
        x = line.split()
        Models[x[0]] = [ np.float64( x[1] ), np.float64( x[2] ) ]
 
-T_aa = {}
-T_ac = {}
-with open( dataDirectory + 'T_SASI.dat' ) as f:
-    i = -1
-    for line in f:
-       i += 1
-       if i < 3: continue
-       x = line.split()
-       T_aa[x[0]] = np.float64( x[1] )
-       T_ac[x[0]] = np.float64( x[2] )
-
 IDs = [ 'NR2D_M1.4_Rpns070_Rs1.50e2', \
         'NR2D_M1.4_Rpns040_Rs1.20e2', \
         'NR2D_M1.4_Rpns040_Rs1.50e2', \
@@ -41,8 +30,13 @@ IDs = [ 'NR2D_M1.4_Rpns070_Rs1.50e2', \
         'GR2D_M2.8_Rpns020_Rs6.00e1', \
         'GR2D_M2.8_Rpns020_Rs7.00e1' ]
 
-xlim   = [ -1.0, 11.0 ]
-xticks = [ 0.0, 2.5, 5.0, 7.5, 10.0 ]
+xlim   = [ [ [ -1.00e1, 5.10e2 ], [ -1.0e1, 5.50e2 ] ], \
+           [ [ -1.00e0, 9.00e1 ], [ -1.0e1, 1.30e2 ] ] ]
+xticks = [ [ [ 0.0, 1.0e2, 2.0e2, 3.0e2, 4.0e2, 5.0e2 ], \
+             [ 0.0, 1.0e2, 2.0e2, 3.0e2, 4.0e2, 5.0e2 ] ], \
+           [ [ 0.0, 2.5e1, 5.0e1, 7.5e1 ], \
+             [ 0.0, 2.5e1, 5.0e1, 7.5e1, 1.0e2, 1.25e2 ] ] ]
+
 ylim   = [ 5.0e10, 5.0e26 ]
 yticks = [ 1.0e11, 1.0e16, 1.0e21, 1.0e26 ]
 
@@ -55,8 +49,6 @@ for i in range( len( IDs ) ):
 
     T, dT = Models[ID]
 
-    T = T_aa[ID.replace( '2D', '1D' )]
-
     data = np.loadtxt( dataDirectory + 'LegendrePowerSpectrum_{:}.dat' \
                                        .format( ID ) )
 
@@ -67,6 +59,7 @@ for i in range( len( IDs ) ):
 
     ind = np.where( time / T < 10.0 )[0]
 
+    T = 1.0
     time = data[0][ind] / T
     H1   = data[2][ind]
 
@@ -104,28 +97,20 @@ for j in range( 2 ):
 
         axs[j,k].set_yscale( 'log' )
 
-        axs[j,k].set_xticks( xticks )
-        axs[j,k].set_xlim( xlim )
+        axs[j,k].set_xticks( xticks[j][k] )
+        axs[j,k].set_xlim( xlim[j][k] )
 
         axs[j,k].set_yticks( yticks )
         axs[j,k].set_ylim( ylim )
 
-axs[0,0].set_xticklabels( '' )
-axs[0,1].set_xticklabels( '' )
-axs[0,1].set_yticklabels( '' )
-axs[1,1].set_yticklabels( '' )
-
-fig.supxlabel( r'$t/T_{\mathrm{aa}}$'        , fontsize = 14, y = 0.01 )
-fig.supylabel( r'$H_{1}$ [cgs]', fontsize = 14, x = 0.02 )
-
-plt.subplots_adjust( hspace = 0.0, wspace = 0.0 )
+fig.supxlabel( r'$t/\mathrm{ms}$', fontsize = 14, y = 0.01 )
+fig.supylabel( r'$H_{1}$ [cgs]'  , fontsize = 14, x = 0.02 )
 
 #plt.show()
 
 figName \
   = figuresDirectory \
-      + 'fig.LegendrePowerSpectrum_MultiPanel_vstOverT.pdf'
-figName = 'fig.LegendrePowerSpectrum_MultiPanel_vstOverTaa.png'
+      + 'fig.LegendrePowerSpectrum_MultiPanel_vstOverms.pdf'
 plt.savefig( figName, dpi = 300 )
 print( '\n  Saved {:}'.format( figName ) )
 
