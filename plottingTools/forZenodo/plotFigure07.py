@@ -41,44 +41,69 @@ for i in range( len( IDs ) ):
     T_NR, dT_NR = Models['NR2D_'+ID]
     T_GR, dT_GR = Models['GR2D_'+ID]
 
+    dataFileName_NR \
+    = dataDirectory + 'LegendrePowerSpectrum_NR2D_{:}.dat'.format( ID )
+    f = open( dataFileName_NR )
+    dum = f.readline()
+    s = f.readline(); ind = s.find( '#' )+1
+    tmp \
+      = np.array( list( map( np.float64, s[ind:].split() ) ), \
+                  np.float64 )
+    omega_NR = tmp[3]
+
+    dataFileName_GR \
+    = dataDirectory + 'LegendrePowerSpectrum_GR2D_{:}.dat'.format( ID )
+    f = open( dataFileName_GR )
+    dum = f.readline()
+    s = f.readline(); ind = s.find( '#' )+1
+    tmp \
+      = np.array( list( map( np.float64, s[ind:].split() ) ), \
+                  np.float64 )
+    omega_GR = tmp[3]
+
     Rsh = np.float64( ID[15:21] )
     M   = np.float64( ID[1:4] )
     R   = np.float64( ID[9:12] )
 
     xi = '{:.1f}'.format( M / ( R / 20.0 ) )
 
+    if col[xi] == '#4daf4a':
+        mew = 2
+    else:
+        mew = 1
+
     if xi != xi1:
 
-        ax.plot  ( Rsh, T_NR , ls = 'none', \
+        ax.plot  ( Rsh, omega_NR * T_NR , ls = 'none', mew = mew, \
                        c = col[xi], marker = mkr, ms = ms, mfc = 'none', \
                        label = r'$\texttt{{NR}}, \xi={:}$'.format( xi ) )
-        ax.plot  ( Rsh, T_GR , ls = 'none', \
+        ax.plot  ( Rsh, omega_GR * T_GR , ls = 'none', \
                        c = col[xi], marker = mkr, ms = ms, \
                        label = r'$\texttt{{GR}}, \xi={:}$'.format( xi ) )
 
     else:
 
-        ax.plot( Rsh, T_NR , ls = 'none', \
+        ax.plot( Rsh, omega_NR * T_NR , ls = 'none', mew = mew, \
                      c = col[xi], marker = mkr, ms = ms, mfc = 'none' )
-        ax.plot( Rsh, T_GR , ls = 'none', \
+        ax.plot( Rsh, omega_GR * T_GR , ls = 'none', \
                      c = col[xi], marker = mkr, ms = ms )
 
     xi1 = xi
 
-ax.legend( loc = 2 )
+ax.legend( loc = 4 )
 ax.grid( which = 'both' )
 
 ax.tick_params( which = 'both', top = True, right = True )
 ax.set_xlabel( r'$R_{\textrm{sh}}\ \left[\mathrm{km}\right]$' )
-ax.set_ylabel( r'$T\ \left[\mathrm{ms}\right]$' )
+ax.set_ylabel( r'$\omega\,T$' )
 
-ax.set_ylim( 3, 100 )
+#ax.set_ylim( 3, 100 )
 
-ax.set_yscale( 'log' )
+#ax.set_yscale( 'log' )
 
 #plt.show()
 
-figName = figuresDirectory + 'fig.OscillationPeriodComparison.pdf'
+figName = '/home/kkadoogan/fig.EfficiencyComparison.png'
 plt.savefig( figName, dpi = 300, bbox_inches = 'tight' )
 print( '\n  Saved {:}'.format( figName ) )
 
