@@ -5,7 +5,7 @@ import numpy as np
 home = '/home/kkadoogan/'
 
 dataDirectory    = './plottingData/'
-figuresDirectory = './'
+figuresDirectory = home + 'Work/accretionShockPaper/Figures/'
 
 # colorblind-friendly palette: https://gist.github.com/thriveth/8560036
 color = ['#377eb8', '#ff7f00', '#4daf4a', \

@@ -33,7 +33,7 @@ IDs = [ 'NR2D_M1.4_Rpns070_Rs1.50e2', \
 xlim   = [ -1.0, 11.0 ]
 xticks = [ 0.0, 2.5, 5.0, 7.5, 10.0 ]
 ylim   = [ 5.0e10, 5.0e26 ]
-yticks = [ 1.0e11, 1.0e16, 1.0e21, 1.0e26 ]
+yticks = [ 1.0e11, 1.0e14, 1.0e17, 1.0e20, 1.0e23, 1.0e26 ]
 
 fig, axs = plt.subplots( 2, 2 )
 

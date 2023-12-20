@@ -24,7 +24,7 @@ ms = 6
 
 xlim = [ 55, 185 ]
 
-fig, axs = plt.subplots( 3, 1, figsize = (12,9) )
+fig, ax = plt.subplots( 1, 1 )
 
 Models = {}
 with open( dataDirectory + 'fft.dat' ) as f:
@@ -76,56 +76,36 @@ for i in range( len( IDs ) ):
 
     if xi != xi1:
 
-        axs[0].plot  ( Rsh, T_NR , ls = 'none', mew = mew, \
-                       c = col[xi], marker = mkr, ms = ms, mfc = 'none', \
-                       label = r'$\texttt{{NR}}, \xi={:}$'.format( xi ) )
-        axs[0].plot  ( Rsh, T_GR , ls = 'none', \
-                       c = col[xi], marker = mkr, ms = ms, \
-                       label = r'$\texttt{{GR}}, \xi={:}$'.format( xi ) )
-        axs[1].plot( Rsh, omega_NR , ls = 'none', mew = mew, \
-                     c = col[xi], marker = mkr, ms = ms, mfc = 'none' )
-        axs[1].plot( Rsh, omega_GR, ls = 'none', \
-                     c = col[xi], marker = mkr, ms = ms )
-        axs[2].plot  ( Rsh, omega_NR * T_NR , ls = 'none', mew = mew, \
-                       c = col[xi], marker = mkr, ms = ms, mfc = 'none' )
-        axs[2].plot  ( Rsh, omega_GR * T_GR , ls = 'none', \
-                       c = col[xi], marker = mkr, ms = ms )
+        ax.plot( Rsh, omega_NR * T_NR , ls = 'none', mew = mew, \
+                 c = col[xi], marker = mkr, ms = ms, mfc = 'none', \
+                 label = r'$\texttt{{NR}}, \xi={:}$'.format( xi ) )
+        ax.plot( Rsh, omega_GR * T_GR , ls = 'none', \
+                 c = col[xi], marker = mkr, ms = ms, \
+                 label = r'$\texttt{{GR}}, \xi={:}$'.format( xi ) )
 
     else:
 
-        axs[0].plot( Rsh,  T_NR , ls = 'none', mew = mew, \
-                     c = col[xi], marker = mkr, ms = ms, mfc = 'none' )
-        axs[0].plot( Rsh, T_GR , ls = 'none', \
-                     c = col[xi], marker = mkr, ms = ms )
-        axs[1].plot( Rsh, omega_NR , ls = 'none', mew = mew, \
-                     c = col[xi], marker = mkr, ms = ms, mfc = 'none' )
-        axs[1].plot( Rsh, omega_GR, ls = 'none', \
-                     c = col[xi], marker = mkr, ms = ms )
-        axs[2].plot  ( Rsh, omega_NR * T_NR , ls = 'none', mew = mew, \
-                       c = col[xi], marker = mkr, ms = ms, mfc = 'none' )
-        axs[2].plot  ( Rsh, omega_GR * T_GR , ls = 'none', \
-                       c = col[xi], marker = mkr, ms = ms )
+        ax.plot( Rsh,  omega_NR * T_NR , ls = 'none', mew = mew, \
+                 c = col[xi], marker = mkr, ms = ms, mfc = 'none' )
+        ax.plot( Rsh, omega_GR * T_GR , ls = 'none', \
+                 c = col[xi], marker = mkr, ms = ms )
 
     xi1 = xi
 
-axs[0].legend( loc = 4 )
+ax.legend( loc = 4 )
 
-for i in range( 3 ):
-    axs[i].set_xlim( xlim )
-    axs[i].grid( which = 'both' )
-    axs[i].tick_params( which = 'both', top = True, right = True )
-    axs[i].set_xlabel( r'$R_{\textrm{sh}}\ \left[\mathrm{km}\right]$' )
+ax.set_xlim( xlim )
+ax.grid( which = 'both' )
+ax.tick_params( which = 'both', top = True, right = True )
+ax.set_xlabel( r'$R_{\textrm{sh}}\ \left[\mathrm{km}\right]$' )
 
-axs[0].set_yscale( 'log' )
-axs[0].set_ylabel( r'$T\ \left[\mathrm{ms}\right]$' )
-axs[1].set_ylabel( r'$\omega\ \left[\mathrm{ms}^{-1}\right]$' )
-axs[2].set_ylabel( r'$\omega\,T$' )
+ax.set_ylabel( r'$\omega\,T$' )
 
-plt.show()
+#plt.show()
 
-#figName = '/home/kkadoogan/fig.EfficiencyComparison.png'
-#plt.savefig( figName, dpi = 300, bbox_inches = 'tight' )
-#print( '\n  Saved {:}'.format( figName ) )
+figName = figuresDirectory + 'fig.EfficiencyComparison.pdf'
+plt.savefig( figName, dpi = 300, bbox_inches = 'tight' )
+print( '\n  Saved {:}'.format( figName ) )
 
 plt.close()
 
