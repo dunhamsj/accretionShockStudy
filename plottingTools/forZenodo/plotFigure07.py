@@ -48,7 +48,7 @@ for i in range( len( IDs ) ):
     xi = '{:.1f}'.format( M / ( R / 20.0 ) )
 
     if col[xi] == '#4daf4a':
-        mew = 2
+        mew = 1
     else:
         mew = 1
 
@@ -81,11 +81,11 @@ ax.set_ylim( 3, 100 )
 
 ax.set_yscale( 'log' )
 
-plt.show()
+#plt.show()
 
-#figName = figuresDirectory + 'fig.EfficiencyComparison.pdf'
-#plt.savefig( figName, dpi = 300, bbox_inches = 'tight' )
-#print( '\n  Saved {:}'.format( figName ) )
+figName = figuresDirectory + 'fig.OscillationPeriodComparison.pdf'
+plt.savefig( figName, dpi = 300, bbox_inches = 'tight' )
+print( '\n  Saved {:}'.format( figName ) )
 
 plt.close()
 
